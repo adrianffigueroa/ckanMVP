@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge'
 import { Link } from 'react-router-dom'
 import { Button } from '../ui/button'
 import {
@@ -22,18 +21,15 @@ const DatasetCard = ({ group }) => {
       </CardHeader>
       <CardFooter className="flex justify-around">
         <div className="flex">
-          {group.formatos.map((formato) => (
-            <Badge
-              key={formato}
-              className={`${formato === 'CSV' || formato === 'XLSX' ? 'bg-green-600' : formato === 'PDF' ? 'bg-red-600' : 'bg-gray-600'} text-white text-xs rounded-md px-2 py-1 mr-2`}
-            >
-              {formato}
-            </Badge>
-          ))}
+          {group && group.metadatos.ultimaActualizacion && (
+            <p className="text-xs text-gray-500">
+              Última Actualización: {group.metadatos.ultimaActualizacion}
+            </p>
+          )}
         </div>
         <div className="flex ms-auto">
-          <Button className="bg-primary text-white text-xs rounded-2xl w-12 h-6 hover:cursor-pointer hover:bg-primary-hover">
-            <Link to={`/datasetsDetails/${group.id}`}>Ver</Link>
+          <Button className="bg-primary text-white text-xs rounded-2xl w-20 h-8 hover:cursor-pointer hover:bg-primary-hover">
+            <Link to={`/datasetsDetails/${group.id}`}>Ver Dataset</Link>
           </Button>
         </div>
       </CardFooter>

@@ -13,8 +13,8 @@ function AccordionItem({ className, ...props }) {
       data-slot="accordion-item"
       className={cn(
         'border p-1 ',
-        'data-[state=open]:rounded-t-md rounded-b-none',
-        'rounded-t-lg',
+        'data-[state=open]:rounded-md',
+        'rounded-lg',
         className
       )}
       {...props}

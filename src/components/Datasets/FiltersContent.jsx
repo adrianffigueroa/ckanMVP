@@ -21,7 +21,7 @@ function FiltersContent({
   setTempCategories,
 }) {
   return (
-    <div className="max-w-[280px] w-full">
+    <div className="max-w-[300px] w-full">
       <Accordion type="multiple" collapsible className="w-full">
         {/* 🔵 Organización */}
         <AccordionItem
@@ -113,14 +113,15 @@ function FiltersContent({
       <div className="flex items-center justify-between mt-4">
         <Button
           onClick={handleApplyFilters}
-          className="px-1 hover:cursor-pointer hover:bg-primary-hover"
+          className="px-1 text-primary bg-white hover:cursor-pointer hover:bg-[rgba(74,58,255,0.1)]
+"
         >
           Aplicar Filtros
         </Button>
         <Button
           onClick={handleCleanFilters}
-          variant="destructive"
-          className="px-1 hover:cursor-pointer hover:bg-red-700"
+          variant=""
+          className="px-1 text-primary bg-white hover:cursor-pointer hover:bg-[rgba(74,58,255,0.1)]"
         >
           Limpiar Filtros
         </Button>

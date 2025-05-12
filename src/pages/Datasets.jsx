@@ -29,20 +29,15 @@ function Datasets() {
   const width = useWindowWidth()
   const location = useLocation()
 
-  // Estados principales
   const [selectedFormats, setSelectedFormats] = useState([])
   const [selectedOrganizations, setSelectedOrganizations] = useState([])
   const [selectedCategories, setSelectedCategories] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-
-  // Estados temporales
   const [tempFormats, setTempFormats] = useState([])
   const [tempOrganizations, setTempOrganizations] = useState([])
   const [tempCategories, setTempCategories] = useState([])
-
   const [isOpen, setIsOpen] = useState(false)
 
-  // Valores únicos
   const uniqueFormats = Array.from(
     new Set(mockGroups.flatMap((g) => g.formatos))
   )
@@ -53,20 +48,16 @@ function Datasets() {
     new Set(mockGroups.map((g) => g.categorias))
   )
 
-  // Lógica para aplicar los filtros
   const filteredGroups = mockGroups.filter((group) => {
     const matchesFormat =
       selectedFormats.length === 0 ||
       group.formatos.some((format) => selectedFormats.includes(format))
-
     const matchesOrganization =
       selectedOrganizations.length === 0 ||
       selectedOrganizations.includes(group.organizacion)
-
     const matchesCategory =
       selectedCategories.length === 0 ||
       selectedCategories.includes(group.categorias)
-
     const matchesSearch =
       searchTerm.trim() === '' ||
       group.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -80,14 +71,12 @@ function Datasets() {
     )
   })
 
-  // Función para manejar cambios en los checkboxes
   const handleCheckboxChange = (value, tempSelected, setTempSelected) => {
     setTempSelected((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     )
   }
 
-  // Aplicar filtros definitivos
   const handleApplyFilters = () => {
     setSelectedFormats(tempFormats)
     setSelectedOrganizations(tempOrganizations)
@@ -95,7 +84,6 @@ function Datasets() {
     setIsOpen(false)
   }
 
-  // Limpiar filtros
   const handleCleanFilters = () => {
     setSelectedFormats([])
     setSelectedOrganizations([])
@@ -108,12 +96,9 @@ function Datasets() {
   useEffect(() => {
     const params = new URLSearchParams(location.search)
     const search = params.get('search')
-    if (search) {
-      setSearchTerm(decodeURIComponent(search))
-    } else {
-      setSearchTerm('')
-    }
+    setSearchTerm(search ? decodeURIComponent(search) : '')
   }, [location.search])
+
   useEffect(() => {
     if (searchTerm) {
       setTempFormats([])
@@ -142,25 +127,70 @@ function Datasets() {
         </div>
 
         <h2 className="text-3xl font-semibold text-primary">
-          Buscador de conjuntos de Datos
+          Buscador de Datasets
         </h2>
         <p className="text-gray-600 mb-4">
           Utiliza este buscador para localizar fácilmente los conjuntos de datos
           que necesites.
         </p>
-        <div className="flex flex-col md:flex-row items-start justify-between">
-          <div className="flex">
-            <p className="text-sm  mt-2">
+
+        <div className="flex flex-col gap-4 w-full">
+          {/* Línea 1: cantidad + ordenar (md:flex) */}
+          <div className="hidden md:flex items-center justify-between w-full">
+            <p className="text-sm">
+              {filteredGroups.length} conjunto
+              {filteredGroups.length !== 1 && 's'} encontrados
+              {searchTerm ? ` para "${searchTerm}"` : ''}
+            </p>
+            <div className="flex items-center">
+              <p className="text-sm me-2">Ordenar por</p>
+              <Select defaultValue={'relevant'}>
+                <SelectTrigger
+                  className="w-[170px] pe-2 border-none"
+                  iconClassName="text-primary"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="relevant">Más Relevante</SelectItem>
+                  <SelectItem value="new">Más Reciente</SelectItem>
+                  <SelectItem value="old">Más Antiguo</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Mobile: cantidad sola */}
+          <div className="md:hidden">
+            <p className="text-sm">
               {filteredGroups.length} conjunto
               {filteredGroups.length !== 1 && 's'} encontrados
               {searchTerm ? ` para "${searchTerm}"` : ''}
             </p>
           </div>
-          <div className="flex items-center">
-            <p className="text-sm">Ordenar por</p>
+
+          {/* Búsqueda + botón filtro (ambos) */}
+          <div className="flex w-full items-center">
+            <SearchBox
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              wrapperClassName="w-full"
+            />
+            {width < 768 && (
+              <Button
+                onClick={() => setIsOpen(true)}
+                className="ms-1 bg-white text-primary h-14 w-14 hover:bg-primary-hover hover:text-white cursor-pointer"
+              >
+                <FilterIcon />
+              </Button>
+            )}
+          </div>
+
+          {/* Mobile: Ordenar por */}
+          <div className="flex md:hidden items-center mt-2">
             <Select defaultValue={'relevant'}>
               <SelectTrigger
-                className="w-[170px] pe-2 border-none"
+                className="w-[170px] pe-2 border-none ms-auto"
                 iconClassName="text-primary"
               >
                 <SelectValue />
@@ -174,10 +204,8 @@ function Datasets() {
           </div>
         </div>
       </div>
-      <div className="mt-4 mb-22 flex flex-col md:flex-row gap-4">
-        {/* BOTÓN para abrir el Sheet solo en mobile */}
 
-        {/* FILTROS DESKTOP */}
+      <div className="mt-4 mb-22 flex flex-col md:flex-row gap-4">
         {width >= 768 && (
           <aside className="w-[280px]">
             <FiltersContent
@@ -197,30 +225,7 @@ function Datasets() {
           </aside>
         )}
 
-        {/* CONTENIDO PRINCIPAL */}
         <div className="flex flex-col w-full gap-4">
-          {/* Barra de búsqueda */}
-          <div className="flex items-center justify-end ">
-            <div className="flex w-full ">
-              <SearchBox
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                wrapperClassName="w-full"
-              />
-            </div>
-            {width < 768 && (
-              <div className="flex">
-                <Button
-                  onClick={() => setIsOpen(true)}
-                  variant=""
-                  className="ms-1 bg-white text-primary h-14 w-14 hover:bg-primary-hover hover:text-white cursor-pointer"
-                >
-                  <FilterIcon className="mr-2" />
-                </Button>
-              </div>
-            )}
-          </div>
-          {/* Sheet Mobile */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent side="right" className="w-[280px] py-16 px-4">
               <FiltersContent
@@ -240,7 +245,6 @@ function Datasets() {
             </SheetContent>
           </Sheet>
 
-          {/* Lista de datasets */}
           <DatasetList mockGroups={filteredGroups} searchTerm={searchTerm} />
         </div>
       </div>

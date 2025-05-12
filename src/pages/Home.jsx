@@ -1,5 +1,6 @@
 import SmallCards from '@/components/Home/SmallCards'
-import CarouselCards from '@/components/ui/carouselCards'
+import CustomCarousel from '@/components/ui/customCarousel'
+import GroupCard from '@/components/ui/groupCard'
 import SearchBox from '@/components/ui/searchbox'
 import { mockGroups } from '@/data/mockGroups'
 import { ClipboardList, Layers, Users } from 'lucide-react'
@@ -7,6 +8,12 @@ import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 const Home = () => {
+  const datos = [
+    { title: 'Tarjeta 1', description: 'Contenido de la tarjeta 1' },
+    { title: 'Tarjeta 2', description: 'Contenido de la tarjeta 2' },
+    { title: 'Tarjeta 3', description: 'Contenido de la tarjeta 3' },
+    // más tarjetas...
+  ]
   const [searchTerm, setSearchTerm] = useState('')
   const location = useLocation()
   const isHomePage = location.pathname === '/'
@@ -30,7 +37,7 @@ const Home = () => {
           setSearchTerm={setSearchTerm}
           isHomePage={isHomePage}
           placeholder={searchTerm ? searchTerm : 'Buscar...'}
-          wrapperClassName="w-1/2"
+          wrapperClassName="w-3/4 md:w-1/2"
         />
       </section>
 
@@ -43,7 +50,7 @@ const Home = () => {
           para organizaciones, ciudadanía y la comunidad investigadora.
         </span>
         <div className="flex items-start justify-center mt-8">
-          <div className="flex mb-8 md:flex-row flex-col items-center gap-8 md:gap-14">
+          <div className="flex mb-8 md:flex-row flex-col items-center gap-6 md:gap-14">
             <SmallCards
               icon={Layers}
               value={
@@ -69,7 +76,7 @@ const Home = () => {
       </section>
       <section className="mb-22 flex text-center items-center justify-center mt-16 w-full relative overflow-visible">
         <div className="absolute inset-0">
-          <div className="w-[135%] lg:translate-x-[8%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-full"></div>
+          <div className="w-[135%] lg:translate-x-[18%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[700px]"></div>
         </div>
         <div className="relative z-10 w-full max-w-5xl text-center mx-auto">
           <h2 className="mt-20 md:mt-8 text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide leading-relaxed mb-6">
@@ -80,9 +87,16 @@ const Home = () => {
             gran utilidad para organizaciones, ciudadanía e investigadores en el
             ámbito de Datos Abiertos.
           </p>
-          {/* <div className="border-0 bg-[#4a3aff26] shadow-[0_0_15px_rgba(74,58,255,0.5)] rounded-md flex items-center justify-center">
-          </div> */}
-          <CarouselCards mockGroups={mockGroups} />
+          <CustomCarousel
+            className="mb-10"
+            items={mockGroups.map((group) => (
+              <GroupCard
+                key={group.id}
+                title={group.title}
+                datasets={group.datasets}
+              />
+            ))}
+          />
         </div>
       </section>
     </div>
