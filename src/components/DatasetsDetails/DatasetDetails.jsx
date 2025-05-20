@@ -8,7 +8,7 @@ import {
 import { mockGroups } from '@/data/mockGroups'
 import { HardHatIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 const DatasetsDetails = () => {
@@ -88,12 +88,18 @@ const DatasetsDetails = () => {
                   ))}
                 </div>
 
-                <div className="ms-auto">
+                <div className="flex flex-col gap-1 items-start ms-auto sm:flex-row md:ms-auto">
                   <Button
                     variant="outline"
-                    className="text-primary rounded-3xl border-primary px-4 py-1 hover:text-white hover:bg-primary-hover cursor-pointer"
+                    className="text-primary rounded-3xl border-primary px-2 py-1 hover:text-white hover:bg-primary-hover cursor-pointer"
                   >
                     Descargar todo
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="sm:ms-1 text-primary rounded-3xl border-primary px-2 py-1 hover:text-white hover:bg-primary-hover cursor-pointer"
+                  >
+                    <Link to={`/datasetsDetailsView/${id}`}>Ver Datos</Link>
                   </Button>
                 </div>
               </div>
@@ -115,17 +121,19 @@ const DatasetsDetails = () => {
                 </div>
               </div>
               <ul className="text-sm">
-                <li className="py-6 flex justify-between">
-                  <span className="text-gray-600">Grupo</span>
-                  <span className="flex items-center gap-2 font-medium">
+                <li className="py-4 flex justify-between">
+                  <span className="text-black font-semibold">Grupo</span>
+                  <span className="flex items-center gap-2 text-gray-600 font-medium">
                     <HardHatIcon size={16} />
                     {dataToShow.grupo.toUpperCase()}
                   </span>
                 </li>
-                <li className="py-6 flex justify-between">
-                  <span className="text-gray-600">Estado del conjunto</span>
+                <li className="py-4 flex justify-between">
+                  <span className="text-black font-semibold">
+                    Estado del conjunto
+                  </span>
                   <span
-                    className={`flex items-center gap-2 font-medium ${dataToShow?.metadatos.estado.toLowerCase() === 'activo' ? 'text-green-600' : 'text-red-600'}`}
+                    className={`flex items-center gap-2 font-medium text-gray-600 ${dataToShow?.metadatos.estado.toLowerCase() === 'activo' ? 'text-green-600' : 'text-red-600'}`}
                   >
                     <span
                       className={`w-2 h-2 rounded-full ${dataToShow?.metadatos.estado.toLowerCase() === 'activo' ? 'bg-green-600' : 'bg-red-600'}`}
@@ -134,33 +142,39 @@ const DatasetsDetails = () => {
                       dataToShow.metadatos.estado.slice(1)}
                   </span>
                 </li>
-                <li className="py-6 flex justify-between">
-                  <span className="text-gray-600">Última actualización</span>
-                  <span className="font-semibold">
+                <li className="py-4 flex justify-between">
+                  <span className="text-black font-semibold">
+                    Última actualización
+                  </span>
+                  <span className="font-semibold text-gray-600">
                     {new Date(
                       dataToShow.metadatos.ultimaActualizacion
                     ).toLocaleDateString()}
                   </span>
                 </li>
-                <li className="py-6 flex justify-between">
-                  <span className="text-gray-600">
+                <li className="py-4 flex justify-between">
+                  <span className="text-black font-semibold">
                     Frecuencia de actualización
                   </span>
-                  <span className="font-medium capitalize">
+                  <span className="font-medium capitalize text-gray-600">
                     {dataToShow.metadatos.frecuenciaActualizacion}
                   </span>
                 </li>
-                <li className="py-6 flex justify-between">
-                  <span className="text-gray-600">Fecha de creación</span>
-                  <span className="font-semibold">
+                <li className="py-4 flex justify-between">
+                  <span className="text-black font-semibold">
+                    Fecha de creación
+                  </span>
+                  <span className="font-semibold text-gray-600">
                     {new Date(
                       dataToShow.metadatos.fechaCreacion
                     ).toLocaleDateString()}
                   </span>
                 </li>
-                <li className="py-6">
+                <li className="py-4">
                   <div className="flex justify-between items-start gap-4">
-                    <span className="text-gray-600 mt-1">Etiquetas</span>
+                    <span className="text-black font-semibold mt-1">
+                      Etiquetas
+                    </span>
                     <div className="flex flex-wrap gap-2 justify-end">
                       {etiquetas.map((etiqueta) => (
                         <Badge

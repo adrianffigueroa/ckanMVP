@@ -1,27 +1,32 @@
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Menu } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 const Navbar = () => {
   const location = useLocation()
+  const isHome = location.pathname === '/'
   return (
-    <div className="bg-secondary fixed top-0 left-0 z-100 w-full flex py-4">
+    <div
+      className={`fixed top-0 left-0 w-full z-50 py-4 transition-colors duration-300 ${
+        isHome ? '' : 'bg-body'
+      }`}
+      style={isHome ? { backgroundColor: 'var(--navBarHome)' } : {}}
+    >
       <div className="flex items-center w-full px-20 justify-between">
         {/* Logo */}
-        <div className="hidden md:flex">
+        <div className="hidden custom-md:flex">
           <Link to="/" className="text-xl font-bold text-blue-600">
             CKAN Cliente
           </Link>
         </div>
         {/* Links centrados */}
-        <div className="hidden md:flex flex-1 justify-center">
+        <div className="hidden custom-md:flex flex-1 justify-center">
           <Link
             to="/datasets"
             className={`text-base mx-6 hover:text-primary ${
               location.pathname.startsWith('/datasets')
-                ? 'text-primary font-bold text-shadow-md'
+                ? 'text-primary font-bold text-shadow custom-md'
                 : 'font-normal'
             }`}
           >
@@ -31,7 +36,7 @@ const Navbar = () => {
             to="/organizaciones"
             className={`text-base mx-6 hover:text-primary ${
               location.pathname.startsWith('/organizaciones')
-                ? 'text-primary font-bold text-shadow-md'
+                ? 'text-primary font-bold text-shadow custom-md'
                 : 'font-normal'
             }`}
           >
@@ -41,7 +46,7 @@ const Navbar = () => {
             to="/grupos"
             className={`text-base mx-6 hover:text-primary ${
               location.pathname.startsWith('/grupos')
-                ? 'text-primary font-bold text-shadow-md'
+                ? 'text-primary font-bold text-shadow custom-md'
                 : 'font-normal'
             }`}
           >
@@ -51,7 +56,7 @@ const Navbar = () => {
             to="/about"
             className={`text-base mx-6 hover:text-primary ${
               location.pathname.startsWith('/about')
-                ? 'text-primary font-bold text-shadow-md'
+                ? 'text-primary font-bold text-shadow custom-md'
                 : 'font-normal'
             }`}
           >
@@ -60,7 +65,7 @@ const Navbar = () => {
         </div>
 
         {/* Botón derecho */}
-        <div className="hidden md:flex">
+        <div className="hidden custom-md:flex">
           <Button className="rounded-3xl bg-primary text-white hover:bg-primary-hover transition duration-300 ease-in-out">
             <Link to="/login" className="text-sm font-medium">
               Iniciar Sesión
@@ -69,10 +74,19 @@ const Navbar = () => {
         </div>
       </div>
       {/* Menú mobile con Sheet */}
-      <div className="md:hidden">
+      <div className="flex justify-between custom-md:hidden px-4">
+        <div className="flex custom-md:hidden">
+          <Link to="/" className="text-xl font-bold text-blue-600">
+            CKAN Cliente
+          </Link>
+        </div>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-primary">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-primary w-12 h-12"
+            >
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
@@ -80,28 +94,33 @@ const Navbar = () => {
             <nav className="flex flex-col gap-8">
               <Link
                 to="/datasets"
-                className="mt-12 text-sm font-semibold hover:text-primary"
+                className="mt-12 text-sm text-gray-500 font-semibold hover:text-primary"
               >
                 Datasets
               </Link>
-              <Separator />
               <Link
                 to="/organizaciones"
-                className="text-sm font-semibold hover:text-primary"
+                className="text-sm text-gray-500 font-semibold hover:text-primary"
               >
                 Organizaciones
               </Link>
-              <Separator />
               <Link
                 to="/grupos"
-                className="text-sm font-semibold hover:text-primary"
+                className="text-sm text-gray-500 font-semibold hover:text-primary"
               >
                 Grupos
               </Link>
-              <Separator />
-              <Link to="/" className="text-sm font-semibold hover:text-primary">
+              <Link
+                to="/"
+                className="text-sm text-gray-500 font-semibold hover:text-primary"
+              >
                 Acerca de
               </Link>
+              <Button className="rounded-3xl bg-primary text-white hover:bg-primary-hover transition duration-300 ease-in-out">
+                <Link to="/login" className="text-sm font-medium">
+                  Iniciar Sesión
+                </Link>
+              </Button>
             </nav>
           </SheetContent>
         </Sheet>

@@ -18,8 +18,14 @@ const Home = () => {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
   return (
-    <div className="flex flex-col items-center pt-16">
-      <section className="flex flex-col items-center w-full bg-secondary py-14">
+    <div
+      className="flex flex-col items-center pt-16"
+      style={{
+        background:
+          'linear-gradient(180deg, rgba(74, 58, 255, 0.08) 0%, rgba(164, 156, 255, 0) 40%)',
+      }}
+    >
+      <section className="flex flex-col items-center w-full py-14">
         <h3 className="flex flex-col text-base items-center text-primary tracking-widest">
           PROVINCIA DE BUENOS AIRES
         </h3>
@@ -41,7 +47,7 @@ const Home = () => {
         />
       </section>
 
-      <section className="mt-16 flex flex-col items-center">
+      <section className="mt-16 md:mt-44 flex flex-col items-center">
         <h2 className="text-3xl font-semibold text-center">
           Nuestros datos en <span className="text-primary">cifras</span>
         </h2>
