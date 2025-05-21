@@ -82,7 +82,7 @@ const Home = () => {
       </section>
       <section className="mb-22 flex text-center items-center justify-center mt-16 w-full relative overflow-visible">
         <div className="absolute inset-0">
-          <div className="w-[135%] lg:translate-x-[18%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[700px]"></div>
+          <div className="w-[135%] lg:translate-x-[18%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[550px]"></div>
         </div>
         <div className="relative z-10 w-full max-w-5xl text-center mx-auto">
           <h2 className="mt-20 md:mt-8 text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide leading-relaxed mb-6">

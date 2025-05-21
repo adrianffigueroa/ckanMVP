@@ -41,7 +41,7 @@ export default function CustomCarousel({ items }) {
   }
 
   return (
-    <div className="relative h-[300px] w-full overflow-visible px-2">
+    <div className="relative h-[300px] w-full overflow-visible px-2 bg-none">
       <div
         ref={scrollRef}
         className="flex overflow-x-auto gap-6 scroll-smooth no-scrollbar px-4 rounded-[40px]"
