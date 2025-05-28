@@ -1,22 +1,50 @@
+import SkeletonCard from '@/components/Home/SkeletonCard'
 import SmallCards from '@/components/Home/SmallCards'
 import CustomCarousel from '@/components/ui/customCarousel'
 import GroupCard from '@/components/ui/groupCard'
 import SearchBox from '@/components/ui/searchbox'
-import { mockGroups } from '@/data/mockGroups'
+import {
+  getDatasetCount,
+  getGroupsWithCounts,
+  getOrganizations,
+} from '@/services/ckanService'
+import { useQuery } from '@tanstack/react-query'
 import { ClipboardList, Layers, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 const Home = () => {
-  const datos = [
-    { title: 'Tarjeta 1', description: 'Contenido de la tarjeta 1' },
-    { title: 'Tarjeta 2', description: 'Contenido de la tarjeta 2' },
-    { title: 'Tarjeta 3', description: 'Contenido de la tarjeta 3' },
-    // más tarjetas...
-  ]
+  const {
+    data: datasetCount,
+    isLoading: loadingDatasets,
+    isError: errorDatasets,
+  } = useQuery({
+    queryKey: ['datasets'],
+    queryFn: getDatasetCount,
+  })
+
+  const {
+    data: organizations,
+    isLoading: loadingOrgs,
+    isError: errorOrgs,
+  } = useQuery({
+    queryKey: ['organizations'],
+    queryFn: getOrganizations,
+  })
+
+  const {
+    data: groups,
+    isLoading: loadingGroups,
+    isError: errorGroups,
+  } = useQuery({
+    queryKey: ['groups'],
+    queryFn: getGroupsWithCounts,
+  })
+
   const [searchTerm, setSearchTerm] = useState('')
   const location = useLocation()
   const isHomePage = location.pathname === '/'
+
   return (
     <div
       className="flex flex-col items-center pt-16"
@@ -60,21 +88,24 @@ const Home = () => {
             <SmallCards
               icon={Layers}
               value={
-                [...new Set(mockGroups.map((group) => group.grupo))].length
+                loadingGroups
+                  ? '...'
+                  : errorGroups
+                    ? 'Error'
+                    : groups?.length || 0
               }
               label={'Grupos'}
             />
             <SmallCards
               icon={Users}
               value={
-                [...new Set(mockGroups.map((group) => group.organizacion))]
-                  .length
+                loadingOrgs ? '...' : errorOrgs ? 'Error' : organizations || 0
               }
               label={'Organizaciones'}
             />
             <SmallCards
               icon={ClipboardList}
-              value={mockGroups.reduce((acc, group) => acc + group.datasets, 0)}
+              value={loadingDatasets ? '...' : datasetCount || 0}
               label={'Datasets'}
             />
           </div>
@@ -82,26 +113,33 @@ const Home = () => {
       </section>
       <section className="mb-22 flex text-center items-center justify-center mt-16 w-full relative overflow-visible">
         <div className="absolute inset-0">
-          <div className="w-[135%] lg:translate-x-[18%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[550px]"></div>
+          <div className="w-[135%] lg:translate-x-[8%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[550px]"></div>
         </div>
         <div className="relative z-10 w-full max-w-5xl text-center mx-auto">
-          <h2 className="mt-20 md:mt-8 text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide leading-relaxed mb-6">
-            Descubre los últimos conjuntos <br /> de datos publicados
+          <h2 className="mt-20 md:mt-12 text-xl sm:text-2xl md:text-3xl font-semibold leading-relaxed mb-6">
+            Descubre los <span className="text-primary">últimos conjuntos</span>{' '}
+            <br /> de datos publicados
           </h2>
           <p className="text-gray-600 mx-auto text-center max-w-[85%] sm:max-w-xl md:max-w-2xl mb-10">
-            De acuerdo a los estándares internacionales, proporcionamos datos de
-            gran utilidad para organizaciones, ciudadanía e investigadores en el
-            ámbito de Datos Abiertos.
+            Explorá los conjuntos de datos más recientes que el Municipio pone a
+            disposición para promover la transparencia, el conocimiento y la
+            colaboración ciudadana.
           </p>
           <CustomCarousel
             className="mb-10"
-            items={mockGroups.map((group) => (
-              <GroupCard
-                key={group.id}
-                title={group.title}
-                datasets={group.datasets}
-              />
-            ))}
+            items={
+              loadingGroups
+                ? Array(5)
+                    .fill(0)
+                    .map((_, i) => <SkeletonCard key={i} />)
+                : (groups || []).map((group) => (
+                    <GroupCard
+                      key={group.name}
+                      title={group.display_name}
+                      datasets={group.package_count ?? 0}
+                    />
+                  ))
+            }
           />
         </div>
       </section>

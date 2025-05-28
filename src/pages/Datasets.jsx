@@ -1,4 +1,3 @@
-import DatasetList from '@/components/Datasets/DatasetList'
 import FiltersContent from '@/components/Datasets/FiltersContent'
 import {
   Breadcrumb,
@@ -16,16 +15,62 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import DatasetList from '@/components/Datasets/DatasetList'
 import { Button } from '@/components/ui/button'
 import SearchBox from '@/components/ui/searchbox'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { mockGroups } from '@/data/mockGroups'
 import { useWindowWidth } from '@/hooks/useWindowWidth'
+import { getAllDatasets } from '@/services/ckanService'
+import { toTitleCase } from '@/utils/toTitleCase'
+import { useQuery } from '@tanstack/react-query'
 import { FilterIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-
 function Datasets() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['datasets'],
+    queryFn: getAllDatasets,
+  })
+
+  const datasets = Array.isArray(data) ? data : []
+
+  const orgSet = new Map()
+
+  if (Array.isArray(datasets)) {
+    datasets.forEach((d) => {
+      const org = d.organization
+      if (org && org.name && org.title && !orgSet.has(org.name)) {
+        orgSet.set(org.name, { name: org.name, title: org.title })
+      }
+    })
+  }
+
+  const uniqueOrganizations = Array.from(orgSet.values())
+
+  const uniqueCategories = Array.isArray(datasets)
+    ? Array.from(
+        new Set(
+          datasets
+            .flatMap((d) =>
+              Array.isArray(d.groups) ? d.groups.map((g) => g.display_name) : []
+            )
+            .filter(Boolean)
+        )
+      )
+    : []
+
+  const uniqueFormats = Array.isArray(datasets)
+    ? Array.from(
+        new Set(
+          datasets.flatMap((d) =>
+            Array.isArray(d.resources)
+              ? d.resources.map((r) => r.format?.toUpperCase()).filter(Boolean)
+              : []
+          )
+        )
+      )
+    : []
+
   const width = useWindowWidth()
   const location = useLocation()
 
@@ -38,32 +83,27 @@ function Datasets() {
   const [tempCategories, setTempCategories] = useState([])
   const [isOpen, setIsOpen] = useState(false)
 
-  const uniqueFormats = Array.from(
-    new Set(mockGroups.flatMap((g) => g.formatos))
-  )
-  const uniqueOrganizations = Array.from(
-    new Set(mockGroups.map((g) => g.organizacion))
-  )
-  const uniqueCategories = Array.from(
-    new Set(mockGroups.map((g) => g.categorias))
-  )
-
-  const filteredGroups = mockGroups.filter((group) => {
+  const filteredDatasets = (datasets || []).filter((dataset) => {
     const matchesFormat =
       selectedFormats.length === 0 ||
-      group.formatos.some((format) => selectedFormats.includes(format))
+      dataset.resources?.some((r) =>
+        selectedFormats.includes(r.format?.toUpperCase())
+      )
+
     const matchesOrganization =
       selectedOrganizations.length === 0 ||
-      selectedOrganizations.includes(group.organizacion)
+      selectedOrganizations.includes(dataset.organization?.name)
+
     const matchesCategory =
       selectedCategories.length === 0 ||
-      selectedCategories.includes(group.categorias)
+      dataset.groups?.some((g) => selectedCategories.includes(g.display_name))
+
     const matchesSearch =
       searchTerm.trim() === '' ||
-      group.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.etiquetas.some((tag) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      dataset.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dataset.notes.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dataset.tags?.some((tag) =>
+        tag.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
 
     return (
@@ -107,6 +147,37 @@ function Datasets() {
     }
   }, [searchTerm])
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const search = params.get('search')
+    const org = params.get('org')
+
+    setSearchTerm(search ? decodeURIComponent(search) : '')
+    if (org) {
+      setSelectedOrganizations([org])
+      setTempOrganizations([org])
+    }
+  }, [location.search])
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const org = params.get('org')
+
+    if (!org) {
+      // Si no hay org en la URL, limpio la selección
+      setSelectedOrganizations([])
+      setTempOrganizations([])
+    }
+  }, [location.search])
+
+  const params = new URLSearchParams(location.search)
+  const cameFromOrg = !!params.get('org')
+  const orgParam = params.get('org')
+  const selectedOrgObject = uniqueOrganizations.find(
+    (org) => org.name === orgParam
+  )
+  const selectedOrgTitle = selectedOrgObject?.title || ''
+
   return (
     <div className="px-20">
       <div className="flex flex-col mt-30 ">
@@ -118,10 +189,16 @@ function Datasets() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/datasets">
-                  {searchTerm ? searchTerm : 'Datasets'}
-                </BreadcrumbLink>
+                <BreadcrumbLink href="/datasets">Datasets</BreadcrumbLink>
               </BreadcrumbItem>
+              {cameFromOrg && selectedOrgTitle && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <span className="text-gray-400">{selectedOrgTitle}</span>
+                  </BreadcrumbItem>
+                </>
+              )}
             </BreadcrumbList>
           </Breadcrumb>
         </div>
@@ -130,16 +207,17 @@ function Datasets() {
           Buscador de Datasets
         </h2>
         <p className="text-gray-600 mb-4">
-          Utiliza este buscador para localizar fácilmente los conjuntos de datos
-          que necesites.
+          {cameFromOrg && selectedOrgTitle
+            ? `Utiliza este buscador para localizar fácilmente los conjuntos de datos pertenecientes a "${toTitleCase(selectedOrgTitle)}".`
+            : 'Utiliza este buscador para localizar fácilmente los conjuntos de datos que necesites.'}
         </p>
 
         <div className="flex flex-col gap-4 w-full">
           {/* Línea 1: cantidad + ordenar (md:flex) */}
           <div className="hidden md:flex items-center justify-between w-full">
             <p className="text-sm">
-              {filteredGroups.length} conjunto
-              {filteredGroups.length !== 1 && 's'} encontrados
+              {filteredDatasets.length} conjunto
+              {filteredDatasets.length !== 1 && 's'} encontrados
               {searchTerm ? ` para "${searchTerm}"` : ''}
             </p>
             <div className="flex items-center">
@@ -163,8 +241,8 @@ function Datasets() {
           {/* Mobile: cantidad sola */}
           <div className="md:hidden">
             <p className="text-sm">
-              {filteredGroups.length} conjunto
-              {filteredGroups.length !== 1 && 's'} encontrados
+              {filteredDatasets.length} conjunto
+              {filteredDatasets.length !== 1 && 's'} encontrados
               {searchTerm ? ` para "${searchTerm}"` : ''}
             </p>
           </div>
@@ -209,6 +287,7 @@ function Datasets() {
         {width >= 768 && (
           <aside className="w-[280px]">
             <FiltersContent
+              hideOrganizations={cameFromOrg}
               uniqueOrganizations={uniqueOrganizations}
               uniqueCategories={uniqueCategories}
               uniqueFormats={uniqueFormats}
@@ -229,6 +308,7 @@ function Datasets() {
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent side="right" className="w-[280px] py-16 px-4">
               <FiltersContent
+                hideOrganizations={cameFromOrg}
                 uniqueOrganizations={uniqueOrganizations}
                 uniqueCategories={uniqueCategories}
                 uniqueFormats={uniqueFormats}
@@ -245,7 +325,10 @@ function Datasets() {
             </SheetContent>
           </Sheet>
 
-          <DatasetList mockGroups={filteredGroups} searchTerm={searchTerm} />
+          <DatasetList
+            filteredDatasets={filteredDatasets}
+            searchTerm={searchTerm}
+          />
         </div>
       </div>
     </div>

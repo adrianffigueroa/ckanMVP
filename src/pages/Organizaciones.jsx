@@ -1,17 +1,33 @@
 import OrganizacionesCard from '@/components/Organizaciones/OrganizacionesCard'
+import OrganizacionesSkeletonCard from '@/components/Organizaciones/OrganizacionesSkeletonCard'
 import SearchBox from '@/components/ui/searchbox'
-import { mockGroups } from '@/data/mockGroups'
+import { getOrganizationsWithInfo } from '@/services/ckanService'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-const Organizaciones = () => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const filteredGroups = mockGroups.filter((group) => {
-    const matchesSearch =
-      searchTerm.trim() === '' ||
-      group.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.organizacion.toLowerCase().includes(searchTerm.toLowerCase())
 
-    return matchesSearch
+const Organizaciones = () => {
+  const {
+    data: organizations = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['organizations'],
+    queryFn: getOrganizationsWithInfo,
   })
+
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredorganizations = Array.isArray(organizations)
+    ? organizations.filter((org) => {
+        const matchesSearch =
+          searchTerm.trim() === '' ||
+          org.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          org.description?.toLowerCase().includes(searchTerm.toLowerCase())
+
+        return matchesSearch
+      })
+    : []
+
   return (
     <div className="mt-40 px-20 flex flex-col mb-22">
       <div className="flex flex-col max-w-screen-xl gap-1">
@@ -22,27 +38,47 @@ const Organizaciones = () => {
           Explora el directorio de instituciones públicas que participan en la
           entrega de datos abiertos.
         </p>
-        <p className="text-sm  mt-2">
-          {filteredGroups.length} organizacion
-          {filteredGroups.length !== 1 && 'es'} encontradas
-          {searchTerm ? ` para "${searchTerm}"` : ''}
-        </p>
+
+        {/* Error */}
+        {isError && (
+          <p className="text-red-500 mt-4 mb-2">
+            ❌ Ocurrió un error al cargar las organizaciones.
+          </p>
+        )}
+
+        {/* Result count */}
+        {!isLoading && !isError && (
+          <p className="text-sm mt-2">
+            {filteredorganizations.length} organizacion
+            {filteredorganizations.length !== 1 && 'es'} encontradas
+            {searchTerm ? ` para "${searchTerm}"` : ''}
+          </p>
+        )}
+
+        {/* Buscador */}
         <div className="w-full max-w-[500px] mb-4">
           <SearchBox
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            wrapperClassName='"w-full"'
+            wrapperClassName="w-full"
           />
         </div>
+
+        {/* Grid de resultados */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filteredGroups.length === 0 && (
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <OrganizacionesSkeletonCard key={i} />
+            ))
+          ) : filteredorganizations.length === 0 ? (
             <p className="text-gray-600 mb-4 md:col-span-4">
               No se encontraron organizaciones para la búsqueda "{searchTerm}"
             </p>
+          ) : (
+            filteredorganizations.map((group) => (
+              <OrganizacionesCard key={group.id} group={group} />
+            ))
           )}
-          {filteredGroups.map((group) => (
-            <OrganizacionesCard key={group.id} group={group} />
-          ))}
         </div>
       </div>
     </div>

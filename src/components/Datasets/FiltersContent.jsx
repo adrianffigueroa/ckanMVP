@@ -5,8 +5,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-
 function FiltersContent({
+  hideOrganizations,
   uniqueOrganizations,
   uniqueCategories,
   uniqueFormats,
@@ -24,34 +24,39 @@ function FiltersContent({
     <div className="max-w-[300px] w-full">
       <Accordion type="multiple" collapsible className="w-full">
         {/* 🔵 Organización */}
-        <AccordionItem
-          value="organizaciones"
-          className="mb-4 shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white"
-        >
-          <AccordionTrigger>Organizaciones</AccordionTrigger>
-          <AccordionContent className="mt-2">
-            {uniqueOrganizations.map((org) => (
-              <div key={org} className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  id={`org-${org}`}
-                  checked={tempOrganizations.includes(org)}
-                  onChange={() =>
-                    handleCheckboxChange(
-                      org,
-                      tempOrganizations,
-                      setTempOrganizations
-                    )
-                  }
-                  className="mr-2"
-                />
-                <label htmlFor={`org-${org}`} className="text-sm text-gray-700">
-                  {org}
-                </label>
-              </div>
-            ))}
-          </AccordionContent>
-        </AccordionItem>
+        {!hideOrganizations && (
+          <AccordionItem
+            value="organizaciones"
+            className="mb-4 shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white"
+          >
+            <AccordionTrigger>Organizaciones</AccordionTrigger>
+            <AccordionContent className="mt-2">
+              {uniqueOrganizations.map((org) => (
+                <div key={org.name} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    id={`org-${org.name}`}
+                    checked={tempOrganizations.includes(org.name)}
+                    onChange={() =>
+                      handleCheckboxChange(
+                        org.name,
+                        tempOrganizations,
+                        setTempOrganizations
+                      )
+                    }
+                    className="mr-2"
+                  />
+                  <label
+                    htmlFor={`org-${org.name}`}
+                    className="text-sm text-gray-700"
+                  >
+                    {org.title || org.name}
+                  </label>
+                </div>
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
         {/* 🟣 Categorías */}
         <AccordionItem

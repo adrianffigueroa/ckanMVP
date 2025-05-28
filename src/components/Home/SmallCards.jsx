@@ -1,4 +1,10 @@
-const SmallCards = ({ icon: Icon, value, label }) => {
+const SmallCards = ({ icon: Icon, value, label, isLoading, isError }) => {
+  let displayValue = value
+
+  if (isLoading) displayValue = '...'
+  else if (isError) displayValue = 'Error'
+  else if (typeof value === 'object') displayValue = '?'
+
   return (
     <div
       className="group relative gap-4 flex items-center justify-center h-16 w-54 
@@ -8,10 +14,10 @@ const SmallCards = ({ icon: Icon, value, label }) => {
     >
       <Icon
         size={30}
-        className="absolute  -translate-x-27 text-white bg-third rounded-full p-1"
+        className="absolute -translate-x-27 text-white bg-third rounded-full p-1"
       />
       <span className="text-primary font-semibold text-3xl group-hover:text-white">
-        {value}
+        {displayValue}
       </span>
       <span>{label}</span>
     </div>

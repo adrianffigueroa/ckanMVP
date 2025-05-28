@@ -39,7 +39,7 @@ export default function SearchBox({
           type="text"
           placeholder={'Buscar...'}
           className="border-none h-8 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-700 placeholder:text-gray-400"
-          value={inputValue ? inputValue : searchTerm}
+          value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />

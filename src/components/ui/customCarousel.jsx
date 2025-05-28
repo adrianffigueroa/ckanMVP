@@ -7,17 +7,18 @@ export default function CustomCarousel({ items }) {
   const [scrollLeft, setScrollLeft] = useState(0)
 
   useEffect(() => {
+    if (items.length <= 4) return // no auto-scroll
+
     const interval = setInterval(() => {
       if (!scrollRef.current) return
       const container = scrollRef.current
       const itemWidth = container.querySelector('div')?.offsetWidth || 250
       const maxScrollLeft = container.scrollWidth - container.clientWidth
 
-      // Si llegó al final, vuelve al inicio
       if (container.scrollLeft + itemWidth >= maxScrollLeft) {
         container.scrollTo({ left: 0, behavior: 'smooth' })
       } else {
-        container.scrollBy({ left: itemWidth + 16, behavior: 'smooth' }) // +gap
+        container.scrollBy({ left: itemWidth + 16, behavior: 'smooth' })
       }
     }, 3000)
 
@@ -44,7 +45,9 @@ export default function CustomCarousel({ items }) {
     <div className="relative h-[300px] w-full overflow-visible px-2 bg-none">
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 scroll-smooth no-scrollbar px-4 rounded-[40px]"
+        className={`flex overflow-x-auto gap-6 scroll-smooth no-scrollbar px-4 rounded-[40px] transition-all duration-300 ${
+          items.length <= 4 ? 'justify-center' : 'justify-start'
+        }`}
         onMouseDown={onMouseDown}
         onMouseLeave={onMouseLeave}
         onMouseUp={onMouseUp}
