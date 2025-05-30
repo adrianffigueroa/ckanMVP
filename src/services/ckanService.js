@@ -1,7 +1,8 @@
 // const BASE_URL = 'localhost:5000/api/3/action'
 const BASE_URL = '/api/3/action'
 export const getDatasetCount = async () => {
-  const res = await fetch(`${BASE_URL}/package_search?q=&rows=0`)
+  // const res = await fetch(`${BASE_URL}/package_search?q=&rows=0`)
+  const res = await fetch(`${BASE_URL}/package_search`)
   const data = await res.json()
   return data.result.count
 }
@@ -35,7 +36,8 @@ export const getGroupsWithCounts = async () => {
 
 export const getAllDatasets = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/package_search?rows=1000`)
+    // const response = await fetch(`${BASE_URL}/package_search?rows=1000`)
+    const response = await fetch(`${BASE_URL}/package_search`)
     const data = await response.json()
     if (data.success && Array.isArray(data.result?.results)) {
       return data.result.results
@@ -49,13 +51,15 @@ export const getAllDatasets = async () => {
 }
 
 export const getOrganizationsWithInfo = async () => {
-  const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
+  // const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
+  const res = await fetch(`${BASE_URL}/organization_list`)
   const data = await res.json()
   return data.result // contiene name, title, description, package_count, etc.
 }
 
 export const getAllGroups = async () => {
-  const res = await fetch(`${BASE_URL}/group_list?all_fields=true`)
+  // const res = await fetch(`${BASE_URL}/group_list?all_fields=true`)
+  const res = await fetch(`${BASE_URL}/group_list`)
   const json = await res.json()
   return json.result
 }
