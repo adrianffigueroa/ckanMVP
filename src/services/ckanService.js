@@ -2,25 +2,26 @@
 const BASE_URL = '/api/3/action'
 export const getDatasetCount = async () => {
   // const res = await fetch(`${BASE_URL}/package_search?q=&rows=0`)
-  const res = await fetch(`${BASE_URL}/package_search`)
+  const res = await fetch(`${BASE_URL}/package_search.json`)
   const data = await res.json()
   return data.result.count
 }
 
 export const getOrganizations = async () => {
-  const res = await fetch(`${BASE_URL}/organization_list`)
+  const res = await fetch(`${BASE_URL}/organization_list.json`)
   const data = await res.json()
   return data.result.length
 }
 
 export const getGroupsWithCounts = async () => {
-  const res = await fetch(`${BASE_URL}/group_list`)
+  const res = await fetch(`${BASE_URL}/group_list.json`)
   const data = await res.json()
 
   const groups = await Promise.all(
     data.result.map(async (groupName) => {
       const res = await fetch(
-        `${BASE_URL}/group_show?id=${groupName}&include_dataset_count=true`
+        // `${BASE_URL}/group_show?id=${groupName}&include_dataset_count=true`
+        `${BASE_URL}/group_show?id=${groupName}.json`
       )
       const groupData = await res.json()
       return {
@@ -37,7 +38,7 @@ export const getGroupsWithCounts = async () => {
 export const getAllDatasets = async () => {
   try {
     // const response = await fetch(`${BASE_URL}/package_search?rows=1000`)
-    const response = await fetch(`${BASE_URL}/package_search`)
+    const response = await fetch(`${BASE_URL}/package_search.json`)
     const data = await response.json()
     if (data.success && Array.isArray(data.result?.results)) {
       return data.result.results
@@ -52,14 +53,14 @@ export const getAllDatasets = async () => {
 
 export const getOrganizationsWithInfo = async () => {
   // const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
-  const res = await fetch(`${BASE_URL}/organization_list`)
+  const res = await fetch(`${BASE_URL}/organization_list.json`)
   const data = await res.json()
   return data.result // contiene name, title, description, package_count, etc.
 }
 
 export const getAllGroups = async () => {
   // const res = await fetch(`${BASE_URL}/group_list?all_fields=true`)
-  const res = await fetch(`${BASE_URL}/group_list`)
+  const res = await fetch(`${BASE_URL}/group_list.json`)
   const json = await res.json()
   return json.result
 }
