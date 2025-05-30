@@ -81,9 +81,14 @@ const DatasetsDetails = () => {
     queryKey: ['datasets'],
     queryFn: getAllDatasets,
   })
+  console.log(allDatasets)
+
+  // const dataset = Array.isArray(allDatasets)
+  //   ? allDatasets.find((d) => d.id === id)
+  //   : null
 
   const dataset = Array.isArray(allDatasets)
-    ? allDatasets.find((d) => d.id === id)
+    ? allDatasets[0] // fuerza a mostrar algo
     : null
 
   const navigate = useNavigate()
@@ -98,6 +103,7 @@ const DatasetsDetails = () => {
       window.open(res.url, '_blank')
     }
   }
+  console.log(dataset)
 
   return (
     <div className="px-20 mb-8">

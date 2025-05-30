@@ -27,6 +27,7 @@ const Organizaciones = () => {
         return matchesSearch
       })
     : []
+  console.log(filteredorganizations)
 
   return (
     <div className="mt-40 px-20 flex flex-col mb-22">
