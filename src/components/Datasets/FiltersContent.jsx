@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 function FiltersContent({
+  hideCategories,
   hideOrganizations,
   uniqueOrganizations,
   uniqueCategories,
@@ -20,6 +21,8 @@ function FiltersContent({
   setTempOrganizations,
   setTempCategories,
 }) {
+  console.log(uniqueCategories)
+
   return (
     <div className="max-w-[300px] w-full">
       <Accordion type="multiple" collapsible className="w-full">
@@ -59,30 +62,39 @@ function FiltersContent({
         )}
 
         {/* 🟣 Categorías */}
-        <AccordionItem
-          value="categorias"
-          className="mb-4 shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white"
-        >
-          <AccordionTrigger>Categorías</AccordionTrigger>
-          <AccordionContent className="mt-2">
-            {uniqueCategories.map((cat) => (
-              <div key={cat} className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  id={`cat-${cat}`}
-                  checked={tempCategories.includes(cat)}
-                  onChange={() =>
-                    handleCheckboxChange(cat, tempCategories, setTempCategories)
-                  }
-                  className="mr-2"
-                />
-                <label htmlFor={`cat-${cat}`} className="text-sm text-gray-700">
-                  {cat}
-                </label>
-              </div>
-            ))}
-          </AccordionContent>
-        </AccordionItem>
+        {!hideCategories && (
+          <AccordionItem
+            value="categorias"
+            className="mb-4 shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white"
+          >
+            <AccordionTrigger>Categorías</AccordionTrigger>
+            <AccordionContent className="mt-2">
+              {uniqueCategories.map((cat) => (
+                <div key={cat} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    id={`cat-${cat}`}
+                    checked={tempCategories.includes(cat)}
+                    onChange={() =>
+                      handleCheckboxChange(
+                        cat,
+                        tempCategories,
+                        setTempCategories
+                      )
+                    }
+                    className="mr-2"
+                  />
+                  <label
+                    htmlFor={`cat-${cat}`}
+                    className="text-sm text-gray-700"
+                  >
+                    {cat}
+                  </label>
+                </div>
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
         {/* 🟡 Formatos */}
         <AccordionItem

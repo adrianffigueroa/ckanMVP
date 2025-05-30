@@ -1,0 +1,5 @@
+{
+  "help": "http://localhost:5000/api/3/action/help_show?name=group_list",
+  "success": true,
+  "result": ["salud", "seguridad"]
+}

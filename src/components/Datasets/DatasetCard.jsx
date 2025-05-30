@@ -12,11 +12,11 @@ import {
 
 const DatasetCard = ({ dataset }) => {
   return (
-    <Link to={`/datasetsDetails/`}>
+    <Link to={`/datasetsDetails/${dataset.id}`}>
       <Card className="p-2 rounded-md shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">
-            {toTitleCase(dataset.name)}
+            {toTitleCase(dataset.title)}
           </CardTitle>
           <CardDescription className="text-sm text-gray-500">
             {dataset.notes}

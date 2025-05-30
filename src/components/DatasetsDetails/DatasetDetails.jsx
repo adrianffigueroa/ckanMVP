@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -5,26 +6,98 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { mockGroups } from '@/data/mockGroups'
-import { HardHatIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
+import { getAllDatasets } from '@/services/ckanService'
+import { toTitleCase } from '@/utils/toTitleCase'
+import { useQuery } from '@tanstack/react-query'
+import {
+  Atom,
+  Banknote,
+  Briefcase,
+  Building2,
+  Bus,
+  Download,
+  Dumbbell,
+  Eye,
+  Globe,
+  GraduationCap,
+  HeartPulse,
+  Palette,
+  Shield,
+  UserCheck,
+  Users,
+} from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
+
+const getGroupIcon = (groupName) => {
+  const icons = {
+    ciencia: Atom,
+    educación: GraduationCap,
+    empleo: Briefcase,
+    geografía: Globe,
+    salud: HeartPulse,
+    ciudadanía: Users,
+    seguridad: Shield,
+    economía: Banknote,
+    infraestructura: Bus,
+    cultura: Palette,
+    deporte: Dumbbell,
+    demografía: UserCheck,
+    urbanismo: Building2,
+  }
+
+  const Icon = icons[groupName?.toLowerCase()] || Globe
+  return (
+    <div className="bg-violet-100 p-2 rounded-md flex items-center justify-center">
+      <Icon className="w-5 h-5 text-primary" />
+    </div>
+  )
+}
+const getColorByFormat = (format) => {
+  switch (format?.toUpperCase()) {
+    case 'HTML':
+      return 'bg-blue-600'
+    case 'PDF':
+      return 'bg-red-600'
+    case 'CSV':
+    case 'XLS':
+    case 'XLSX':
+      return 'bg-green-600'
+    case 'JSON':
+      return 'bg-orange-600'
+    default:
+      return 'bg-gray-600'
+  }
+}
+
 const DatasetsDetails = () => {
   const { id } = useParams()
-  const [dataToShow, setDataToShow] = useState(null)
-  const [etiquetas, setEtiquetas] = useState([])
-  useEffect(() => {
-    console.log(`Dataset ID: ${id}`)
-    // Aquí podrías buscar el dataset por id y mostrar los datos
-    const dataset = mockGroups.find((group) => group.id === parseInt(id))
-    if (dataset) {
-      setDataToShow(dataset)
-      setEtiquetas(dataset.etiquetas)
+
+  const {
+    data: allDatasets,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['datasets'],
+    queryFn: getAllDatasets,
+  })
+
+  const dataset = Array.isArray(allDatasets)
+    ? allDatasets.find((d) => d.id === id)
+    : null
+
+  const navigate = useNavigate()
+  const handleVerRecurso = (res) => {
+    const format = res.format?.toLowerCase()
+
+    if (['csv', 'xls', 'xlsx'].includes(format)) {
+      // Redirige a visualización con Rosen Charts
+      navigate(`/resourceView/${res.id}`)
+    } else {
+      // Abre visor externo para PDF, Word, etc.
+      window.open(res.url, '_blank')
     }
-    console.log(dataToShow)
-  }, [id])
+  }
 
   return (
     <div className="px-20 mb-8">
@@ -38,160 +111,148 @@ const DatasetsDetails = () => {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/datasets">{'Datasets'}</BreadcrumbLink>
+                  <BreadcrumbLink href="/datasets">Datasets</BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <h2 className="text-3xl font-semibold text-primary mb-4">Datasets</h2>
+          <h2 className="text-3xl font-semibold text-primary mb-4">
+            {'Datasets'}
+          </h2>
+          <p className="text-black font-semibold text-base mt-1">
+            {dataset?.title || 'Sin titulo'}
+          </p>
+          <p className="text-gray-600 text-base mt-1">
+            {dataset?.notes || 'Sin descripción'}
+          </p>
         </div>
-        {dataToShow && (
-          <>
-            <h3 className="text-xl font-medium">{dataToShow.title}</h3>
-            <p className="text-gray-600 text-base mt-1">
-              {dataToShow.subtitulo}
-            </p>
-          </>
-        )}
-      </section>
 
-      <section className="mt-10 flex flex-col md:flex-row gap-10">
-        {dataToShow && (
-          <>
-            {/* Columna izquierda */}
-            <div className="flex-1 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200 h-1/3 min-h-min">
-              {/* Encabezado con icono + info de organización */}
+        <section className="mt-10 flex flex-col md:flex-row gap-10">
+          {/* Columna izquierda */}
+          <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
+            <p className="text-gray-600">{dataset?.description}</p>
 
-              {/* Descripción */}
-              <div>
-                <p className="text-gray-600">{dataToShow.descripcion}</p>
-              </div>
-
-              {/* Formatos disponibles */}
-              <div className="flex flex-col items-start md:flex-row md:items-end gap-4 mt-4">
-                <p className="font-semibold mb-1">Conjunto disponible en:</p>
-
-                <div className="flex gap-2 mb-1">
-                  {dataToShow.formatos.map((formato) => (
+            <div className="flex flex-col gap-2 h-1/4">
+              {dataset?.resources.map((res, index) => (
+                <div
+                  key={res.id || index}
+                  className="flex justify-end items-start gap-4 border-b pb-4"
+                >
+                  {/* Izquierda: formato + info */}
+                  <div className="flex items-start me-auto gap-3">
                     <Badge
-                      key={formato}
-                      className={`${
-                        formato === 'CSV' || formato === 'XLSX'
-                          ? 'bg-green-600'
-                          : formato === 'PDF'
-                            ? 'bg-red-600'
-                            : 'bg-gray-600'
-                      } text-white text-xs rounded-md px-3 py-1`}
+                      className={`${getColorByFormat(res.format)} text-white text-xs px-3 py-1 mt-1`}
                     >
-                      {formato}
+                      {res.format?.toUpperCase()}
                     </Badge>
-                  ))}
-                </div>
+                    <div className="flex flex-col">
+                      <a
+                        href={res.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary font-medium text-sm hover:underline"
+                      >
+                        {res.name}
+                      </a>
+                      <p className="text-sm text-gray-600">
+                        {res.description || res.notes || 'Sin descripción'}
+                      </p>
+                    </div>
+                  </div>
 
-                <div className="flex flex-col gap-1 items-start ms-auto sm:flex-row md:ms-auto">
-                  <Button
-                    variant="outline"
-                    className="text-primary rounded-3xl border-primary px-2 py-1 hover:text-white hover:bg-primary-hover cursor-pointer"
-                  >
-                    Descargar todo
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="sm:ms-1 text-primary rounded-3xl border-primary px-2 py-1 hover:text-white hover:bg-primary-hover cursor-pointer"
-                  >
-                    <Link to={`/datasetsDetailsView/${id}`}>Ver Datos</Link>
-                  </Button>
+                  {/* Derecha: botón descarga */}
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <Button
+                      href={res.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex ms-auto items-center gap-1 w-24 h-8 rounded-xl bg-primary text-sm text-white hover:cursor-pointer hover:bg-primary-hover"
+                    >
+                      Descargar <Download size={14} className="text-white" />
+                    </Button>
+                    <Button
+                      className={
+                        'bg-primary text-white text-sm rounded-xl w-28 h-8 hover:cursor-pointer hover:bg-primary-hover'
+                      }
+                      onClick={() => handleVerRecurso(res)}
+                    >
+                      Ver Recurso <Eye size={14} className="text-white" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
+          </div>
 
-            {/* Columna derecha: Información adicional */}
-            <div className="w-full md:w-2/5 bg-white rounded-xl p-5 shadow border border-gray-200">
-              <div className="flex items-center lg:items-start gap-4 border-b-2">
-                <div className="flex-shrink-0">
-                  <HardHatIcon
-                    size={60}
-                    className="text-primary bg-bgIcon rounded-md p-2"
-                  />
+          {/* Columna derecha */}
+          <div className="w-full lg:w-1/3 bg-white rounded-xl p-5 shadow border border-gray-200">
+            <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
+              <div className="flex gap-4">
+                <div className="flex items-center">
+                  {getGroupIcon(dataset?.groups[0].name)}
                 </div>
                 <div className="w-full">
                   <p className="text-gray-600 text-sm">Desarrollado por</p>
-                  <p className="font-semibold">{dataToShow.suborganizacion}</p>
-                  <p className="text-gray-600">{dataToShow.organizacion}</p>
+                  <p className="font-semibold">
+                    {toTitleCase(dataset?.organization?.title) ||
+                      'Organización desconocida'}
+                  </p>
                 </div>
               </div>
-              <ul className="text-sm">
-                <li className="py-4 flex justify-between">
-                  <span className="text-black font-semibold">Grupo</span>
-                  <span className="flex items-center gap-2 text-gray-600 font-medium">
-                    <HardHatIcon size={16} />
-                    {dataToShow.grupo.toUpperCase()}
-                  </span>
-                </li>
-                <li className="py-4 flex justify-between">
-                  <span className="text-black font-semibold">
-                    Estado del conjunto
-                  </span>
-                  <span
-                    className={`flex items-center gap-2 font-medium text-gray-600 ${dataToShow?.metadatos.estado.toLowerCase() === 'activo' ? 'text-green-600' : 'text-red-600'}`}
-                  >
-                    <span
-                      className={`w-2 h-2 rounded-full ${dataToShow?.metadatos.estado.toLowerCase() === 'activo' ? 'bg-green-600' : 'bg-red-600'}`}
-                    />
-                    {dataToShow.metadatos.estado.charAt(0).toUpperCase() +
-                      dataToShow.metadatos.estado.slice(1)}
-                  </span>
-                </li>
-                <li className="py-4 flex justify-between">
-                  <span className="text-black font-semibold">
-                    Última actualización
-                  </span>
-                  <span className="font-semibold text-gray-600">
-                    {new Date(
-                      dataToShow.metadatos.ultimaActualizacion
-                    ).toLocaleDateString()}
-                  </span>
-                </li>
-                <li className="py-4 flex justify-between">
-                  <span className="text-black font-semibold">
-                    Frecuencia de actualización
-                  </span>
-                  <span className="font-medium capitalize text-gray-600">
-                    {dataToShow.metadatos.frecuenciaActualizacion}
-                  </span>
-                </li>
-                <li className="py-4 flex justify-between">
-                  <span className="text-black font-semibold">
-                    Fecha de creación
-                  </span>
-                  <span className="font-semibold text-gray-600">
-                    {new Date(
-                      dataToShow.metadatos.fechaCreacion
-                    ).toLocaleDateString()}
-                  </span>
-                </li>
-                <li className="py-4">
-                  <div className="flex justify-between items-start gap-4">
-                    <span className="text-black font-semibold mt-1">
-                      Etiquetas
-                    </span>
-                    <div className="flex flex-wrap gap-2 justify-end">
-                      {etiquetas.map((etiqueta) => (
-                        <Badge
-                          key={etiqueta}
-                          variant="outline"
-                          className="bg-white text-gray-600"
-                        >
-                          {etiqueta}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </li>
-              </ul>
+              <p className="text-gray-600 text-base mb-4">
+                {dataset?.organization?.description || 'Sin descripción'}
+              </p>
             </div>
-          </>
-        )}
+            <ul className="text-sm space-y-8 mt-4">
+              <li className="grid grid-cols-2 items-start">
+                <div className="text-black font-semibold">Estado</div>
+                <div
+                  className={`${dataset?.state === 'active' ? 'text-green-600' : 'text-red-600'} font-semibold`}
+                >
+                  {dataset?.state === 'active' ? 'Activo' : 'Inactivo'}
+                </div>
+              </li>
+              <li className="grid grid-cols-2 items-start">
+                <div className="text-black font-semibold">
+                  Última actualización
+                </div>
+                <div className="text-gray-600">
+                  {dataset?.resources?.[0]?.last_modified
+                    ? new Date(
+                        dataset.resources[0].last_modified
+                      ).toLocaleDateString('es-AR')
+                    : 'No disponible'}
+                </div>
+              </li>
+              <li className="grid grid-cols-2 items-start">
+                <div className="text-black font-semibold">
+                  Fecha de creación
+                </div>
+                <div className="text-gray-600">
+                  {dataset?.metadata_created
+                    ? new Date(dataset.metadata_created).toLocaleDateString(
+                        'es-AR'
+                      )
+                    : 'No disponible'}
+                </div>
+              </li>
+              <li className="grid grid-cols-2 items-start">
+                <div className="text-black font-semibold mt-1">Etiquetas</div>
+                <div className="flex flex-wrap gap-2">
+                  {dataset?.tags?.map((tag) => (
+                    <Badge
+                      key={tag.name}
+                      variant="outline"
+                      className="bg-white text-gray-600"
+                    >
+                      {tag.name}
+                    </Badge>
+                  ))}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
       </section>
     </div>
   )

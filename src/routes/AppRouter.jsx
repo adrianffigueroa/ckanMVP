@@ -8,6 +8,7 @@ import Grupos from '@/pages/Grupos'
 import Home from '@/pages/Home'
 import Organizaciones from '@/pages/Organizaciones'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import ResourceViewr from '../components/ui/ResourceViewer'
 
 function AppRouter() {
   return (
@@ -16,6 +17,7 @@ function AppRouter() {
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="datasets" element={<Datasets />} />
+          <Route path="/resourceView/:id" element={<ResourceViewr />} />
           <Route path="datasetsDetails/:id" element={<DatasetsDetails />} />
           <Route path="datasetsDetailsView/:id" element={<ChartViewer />} />
           <Route path="organizaciones" element={<Organizaciones />} />

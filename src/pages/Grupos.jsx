@@ -1,28 +1,28 @@
 import GruposCards from '@/components/Grupos/GruposCards'
+import GruposSkeletonCard from '@/components/Grupos/GruposSkeletonCard'
 import SearchBox from '@/components/ui/searchbox'
-import { mockGroups } from '@/data/mockGroups'
+import { getAllGroups } from '@/services/ckanService'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const Grupos = () => {
-  const [searchTerm, setSearchTerm] = useState('')
-
-  // Primero filtramos por búsqueda
-  const filteredGroups = mockGroups.filter((group) => {
-    const matchesSearch =
-      searchTerm.trim() === '' ||
-      group.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.organizacion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.grupo.toLowerCase().includes(searchTerm.toLowerCase())
-
-    return matchesSearch
+  const {
+    data: groups = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['groups'],
+    queryFn: getAllGroups,
   })
 
-  // Luego eliminamos duplicados por nombre de grupo
-  const seen = new Set()
-  const uniqueGroups = filteredGroups.filter((group) => {
-    if (seen.has(group.grupo)) return false
-    seen.add(group.grupo)
-    return true
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredGroups = groups.filter((group) => {
+    const matchesSearch =
+      searchTerm.trim() === '' ||
+      group.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      group.display_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    return matchesSearch
   })
 
   return (
@@ -36,7 +36,7 @@ const Grupos = () => {
           datos abiertos.
         </p>
         <p className="text-sm mt-2">
-          {uniqueGroups.length} grupo{uniqueGroups.length !== 1 && 's'}{' '}
+          {filteredGroups.length} grupo{filteredGroups.length !== 1 && 's'}{' '}
           encontrados
           {searchTerm ? ` para "${searchTerm}"` : ''}
         </p>
@@ -48,14 +48,19 @@ const Grupos = () => {
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {uniqueGroups.length === 0 && (
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <GruposSkeletonCard key={i} />
+            ))
+          ) : filteredGroups.length === 0 ? (
             <p className="text-gray-600 mb-4 md:col-span-4">
               No se encontraron grupos para la búsqueda "{searchTerm}"
             </p>
+          ) : (
+            filteredGroups.map((group) => (
+              <GruposCards key={group.id} group={group} />
+            ))
           )}
-          {uniqueGroups.map((group) => (
-            <GruposCards key={group.grupo} group={group} />
-          ))}
         </div>
       </div>
     </div>

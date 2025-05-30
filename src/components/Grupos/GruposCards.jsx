@@ -1,3 +1,4 @@
+import { toTitleCase } from '@/utils/toTitleCase'
 import {
   Atom,
   Banknote,
@@ -13,9 +14,9 @@ import {
   UserCheck,
   Users,
 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from '../ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card'
-
 const getGroupIcon = (groupName) => {
   const icons = {
     ciencia: Atom,
@@ -41,27 +42,29 @@ const getGroupIcon = (groupName) => {
   )
 }
 const GruposCards = ({ group }) => {
+  console.log(group)
+
   return (
     <div>
       <Card className="h-60 w-full flex flex-col justify-between p-4 rounded-md shadow-[0_20px_80px_rgba(74,58,255,0.08)] bg-white">
         <CardHeader className="p-0">
           <div className="flex items-center gap-3">
-            {getGroupIcon(group?.grupo)}
+            {getGroupIcon(group?.name)}
             <CardTitle className="text-base font-semibold leading-tight">
-              {group?.grupo?.charAt(0).toUpperCase() + group?.grupo?.slice(1)}
+              {toTitleCase(group?.name)}
             </CardTitle>
           </div>
           <CardDescription className="text-sm text-gray-500 mt-2 line-clamp-5">
-            {group?.descripcion}
+            {group?.description}
           </CardDescription>
         </CardHeader>
 
         <div className="flex justify-center p-0">
           <Button
-            variant="outline"
-            className="w-full text-primary border-primary text-xs rounded-2xl h-6 hover:cursor-pointer hover:bg-primary-hover hover:text-white"
+            asChild
+            className="bg-primary text-white text-sm px-4 py-2 rounded-xl"
           >
-            Ver Datasets
+            <Link to={`/datasets?group=${group.name}`}>Ver Datasets</Link>
           </Button>
         </div>
       </Card>

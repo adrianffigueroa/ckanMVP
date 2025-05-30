@@ -83,6 +83,12 @@ function Datasets() {
   const [tempCategories, setTempCategories] = useState([])
   const [isOpen, setIsOpen] = useState(false)
 
+  const params = new URLSearchParams(location.search)
+  const orgParam = params.get('org')
+  const groupParam = params.get('group')
+  const cameFromOrg = !!orgParam
+  const cameFromGroup = !!groupParam
+
   const filteredDatasets = (datasets || []).filter((dataset) => {
     const matchesFormat =
       selectedFormats.length === 0 ||
@@ -96,7 +102,12 @@ function Datasets() {
 
     const matchesCategory =
       selectedCategories.length === 0 ||
-      dataset.groups?.some((g) => selectedCategories.includes(g.display_name))
+      dataset.groups?.some((g) =>
+        selectedCategories.includes(g.display_name.toLowerCase())
+      )
+
+    const matchesGroup =
+      !groupParam || dataset.groups?.some((g) => g.name === groupParam)
 
     const matchesSearch =
       searchTerm.trim() === '' ||
@@ -107,7 +118,11 @@ function Datasets() {
       )
 
     return (
-      matchesFormat && matchesOrganization && matchesCategory && matchesSearch
+      matchesFormat &&
+      matchesOrganization &&
+      matchesCategory &&
+      matchesSearch &&
+      matchesGroup
     )
   })
 
@@ -151,32 +166,41 @@ function Datasets() {
     const params = new URLSearchParams(location.search)
     const search = params.get('search')
     const org = params.get('org')
+    const group = params.get('group')
 
     setSearchTerm(search ? decodeURIComponent(search) : '')
+
     if (org) {
       setSelectedOrganizations([org])
       setTempOrganizations([org])
-    }
-  }, [location.search])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    const org = params.get('org')
-
-    if (!org) {
-      // Si no hay org en la URL, limpio la selección
+    } else {
       setSelectedOrganizations([])
       setTempOrganizations([])
     }
+
+    if (group) {
+      setSelectedCategories([group])
+      setTempCategories([group])
+    } else {
+      setSelectedCategories([])
+      setTempCategories([])
+    }
   }, [location.search])
 
-  const params = new URLSearchParams(location.search)
-  const cameFromOrg = !!params.get('org')
-  const orgParam = params.get('org')
   const selectedOrgObject = uniqueOrganizations.find(
     (org) => org.name === orgParam
   )
   const selectedOrgTitle = selectedOrgObject?.title || ''
+
+  const allGroups = datasets?.flatMap((d) => d.groups || [])
+  const uniqueGroupMap = new Map()
+  allGroups?.forEach((g) => {
+    if (g?.name && g?.display_name && !uniqueGroupMap.has(g.name)) {
+      uniqueGroupMap.set(g.name, g.display_name)
+    }
+  })
+  const selectedGroupTitle = groupParam ? uniqueGroupMap.get(groupParam) : ''
+  console.log(filteredDatasets)
 
   return (
     <div className="px-20">
@@ -191,14 +215,24 @@ function Datasets() {
               <BreadcrumbItem>
                 <BreadcrumbLink href="/datasets">Datasets</BreadcrumbLink>
               </BreadcrumbItem>
-              {cameFromOrg && selectedOrgTitle && (
+              {(cameFromOrg && selectedOrgTitle && (
                 <>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
                     <span className="text-gray-400">{selectedOrgTitle}</span>
                   </BreadcrumbItem>
                 </>
-              )}
+              )) ||
+                (cameFromGroup && selectedGroupTitle && (
+                  <>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <span className="text-gray-400">
+                        {selectedGroupTitle}
+                      </span>
+                    </BreadcrumbItem>
+                  </>
+                ))}
             </BreadcrumbList>
           </Breadcrumb>
         </div>
@@ -209,7 +243,10 @@ function Datasets() {
         <p className="text-gray-600 mb-4">
           {cameFromOrg && selectedOrgTitle
             ? `Utiliza este buscador para localizar fácilmente los conjuntos de datos pertenecientes a "${toTitleCase(selectedOrgTitle)}".`
-            : 'Utiliza este buscador para localizar fácilmente los conjuntos de datos que necesites.'}
+            : 'Utiliza este buscador para localizar fácilmente los conjuntos de datos que necesites.' ||
+                (cameFromGroup && selectedGroupTitle)
+              ? `Utiliza este buscador para localizar fastballmente los conjuntos de datos pertenecientes al Grupo "${toTitleCase(selectedGroupTitle)}".`
+              : 'Utiliza este buscador para localizar fastballmente los conjuntos de datos que necesites.'}
         </p>
 
         <div className="flex flex-col gap-4 w-full">
@@ -287,6 +324,7 @@ function Datasets() {
         {width >= 768 && (
           <aside className="w-[280px]">
             <FiltersContent
+              hideCategories={cameFromGroup}
               hideOrganizations={cameFromOrg}
               uniqueOrganizations={uniqueOrganizations}
               uniqueCategories={uniqueCategories}
@@ -308,6 +346,7 @@ function Datasets() {
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent side="right" className="w-[280px] py-16 px-4">
               <FiltersContent
+                hideCategories={cameFromGroup}
                 hideOrganizations={cameFromOrg}
                 uniqueOrganizations={uniqueOrganizations}
                 uniqueCategories={uniqueCategories}
