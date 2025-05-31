@@ -9,9 +9,9 @@ import {
   getOrganizations,
 } from '@/services/ckanService'
 import { useQuery } from '@tanstack/react-query'
-import { ClipboardList, Layers, Users } from 'lucide-react'
+import { ClipboardList, Layers, Loader2, Users } from 'lucide-react'
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Home = () => {
   const {
@@ -85,35 +85,55 @@ const Home = () => {
         </span>
         <div className="flex items-start justify-center mt-8">
           <div className="flex mb-8 md:flex-row flex-col items-center gap-6 md:gap-14">
-            <SmallCards
-              icon={Layers}
-              value={
-                loadingGroups
-                  ? '...'
-                  : errorGroups
-                    ? 'Error'
-                    : groups?.length || 0
-              }
-              label={'Grupos'}
-            />
-            <SmallCards
-              icon={Users}
-              value={
-                loadingOrgs ? '...' : errorOrgs ? 'Error' : organizations || 0
-              }
-              label={'Organizaciones'}
-            />
-            <SmallCards
-              icon={ClipboardList}
-              value={loadingDatasets ? '...' : datasetCount || 0}
-              label={'Datasets'}
-            />
+            <Link to="/grupos">
+              <SmallCards
+                icon={Layers}
+                value={
+                  loadingGroups ? (
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  ) : errorGroups ? (
+                    'Error'
+                  ) : (
+                    groups?.length || 0
+                  )
+                }
+                label={'Grupos'}
+              />
+            </Link>
+            <Link to="/organizaciones">
+              <SmallCards
+                icon={Users}
+                value={
+                  loadingOrgs ? (
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  ) : errorOrgs ? (
+                    'Error'
+                  ) : (
+                    organizations || 0
+                  )
+                }
+                label={'Organizaciones'}
+              />
+            </Link>
+            <Link to="/datasets">
+              <SmallCards
+                icon={ClipboardList}
+                value={
+                  loadingDatasets ? (
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  ) : (
+                    datasetCount || 0
+                  )
+                }
+                label={'Datasets'}
+              />
+            </Link>
           </div>
         </div>
       </section>
       <section className="mb-22 flex text-center items-center justify-center mt-16 w-full relative overflow-visible">
         <div className="absolute inset-0">
-          <div className="w-[135%] lg:translate-x-[8%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[550px]"></div>
+          <div className="w-[135%] lg:translate-x-[8%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[600px]"></div>
         </div>
         <div className="relative z-10 w-full max-w-5xl text-center mx-auto">
           <h2 className="mt-20 md:mt-12 text-xl sm:text-2xl md:text-3xl font-semibold leading-relaxed mb-6">
@@ -126,7 +146,7 @@ const Home = () => {
             colaboración ciudadana.
           </p>
           <CustomCarousel
-            className="mb-10"
+            className="mb-10 pb-10"
             items={
               loadingGroups
                 ? Array(5)

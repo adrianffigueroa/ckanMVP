@@ -45,7 +45,7 @@ export default function CustomCarousel({ items }) {
     <div className="relative h-[300px] w-full overflow-visible px-2 bg-none">
       <div
         ref={scrollRef}
-        className={`flex overflow-x-auto gap-6 scroll-smooth no-scrollbar px-4 rounded-[40px] transition-all duration-300 ${
+        className={`flex bg-transparent h-80 overflow-x-auto gap-6 scroll-smooth no-scrollbar px-4 rounded-[40px] transition-all duration-300 ${
           items.length <= 4 ? 'justify-center' : 'justify-start'
         }`}
         onMouseDown={onMouseDown}

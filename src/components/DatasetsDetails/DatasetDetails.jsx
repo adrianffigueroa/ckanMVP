@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { getAllDatasets } from '@/services/ckanService'
+import getColorByFormat from '@/utils/getColorsByFormat'
 import { toTitleCase } from '@/utils/toTitleCase'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -28,7 +29,6 @@ import {
   Users,
 } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
-
 const getGroupIcon = (groupName) => {
   const icons = {
     ciencia: Atom,
@@ -53,22 +53,6 @@ const getGroupIcon = (groupName) => {
     </div>
   )
 }
-const getColorByFormat = (format) => {
-  switch (format?.toUpperCase()) {
-    case 'HTML':
-      return 'bg-blue-600'
-    case 'PDF':
-      return 'bg-red-600'
-    case 'CSV':
-    case 'XLS':
-    case 'XLSX':
-      return 'bg-green-600'
-    case 'JSON':
-      return 'bg-orange-600'
-    default:
-      return 'bg-gray-600'
-  }
-}
 
 const DatasetsDetails = () => {
   const { id } = useParams()
@@ -81,14 +65,8 @@ const DatasetsDetails = () => {
     queryKey: ['datasets'],
     queryFn: getAllDatasets,
   })
-  console.log(allDatasets)
-
-  // const dataset = Array.isArray(allDatasets)
-  //   ? allDatasets.find((d) => d.id === id)
-  //   : null
-
   const dataset = Array.isArray(allDatasets)
-    ? allDatasets[0] // fuerza a mostrar algo
+    ? allDatasets.find((d) => d.id === id)
     : null
 
   const navigate = useNavigate()
@@ -103,7 +81,10 @@ const DatasetsDetails = () => {
       window.open(res.url, '_blank')
     }
   }
-  console.log(dataset)
+
+  const handleDownload = (res) => {
+    window.open(res.url, '_blank')
+  }
 
   return (
     <div className="px-20 mb-8">
@@ -169,7 +150,7 @@ const DatasetsDetails = () => {
                   {/* Derecha: botón descarga */}
                   <div className="flex gap-2 w-full sm:w-auto">
                     <Button
-                      href={res.url}
+                      onClick={() => handleDownload(res)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex ms-auto items-center gap-1 w-24 h-8 rounded-xl bg-primary text-sm text-white hover:cursor-pointer hover:bg-primary-hover"

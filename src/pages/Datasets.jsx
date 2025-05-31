@@ -7,6 +7,15 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 
+import DatasetList from '@/components/Datasets/DatasetList'
+import { Button } from '@/components/ui/button'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+} from '@/components/ui/pagination'
+import SearchBox from '@/components/ui/searchbox'
 import {
   Select,
   SelectContent,
@@ -15,17 +24,15 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import DatasetList from '@/components/Datasets/DatasetList'
-import { Button } from '@/components/ui/button'
-import SearchBox from '@/components/ui/searchbox'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { useWindowWidth } from '@/hooks/useWindowWidth'
 import { getAllDatasets } from '@/services/ckanService'
 import { toTitleCase } from '@/utils/toTitleCase'
 import { useQuery } from '@tanstack/react-query'
 import { FilterIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { toast } from 'sonner'
 function Datasets() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['datasets'],
@@ -82,49 +89,83 @@ function Datasets() {
   const [tempOrganizations, setTempOrganizations] = useState([])
   const [tempCategories, setTempCategories] = useState([])
   const [isOpen, setIsOpen] = useState(false)
-
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 2
+  const [sortOption, setSortOption] = useState('new')
   const params = new URLSearchParams(location.search)
   const orgParam = params.get('org')
   const groupParam = params.get('group')
   const cameFromOrg = !!orgParam
   const cameFromGroup = !!groupParam
 
-  const filteredDatasets = (datasets || []).filter((dataset) => {
-    const matchesFormat =
-      selectedFormats.length === 0 ||
-      dataset.resources?.some((r) =>
-        selectedFormats.includes(r.format?.toUpperCase())
+  const filteredDatasets = (datasets || [])
+    .filter((dataset) => {
+      const matchesFormat =
+        selectedFormats.length === 0 ||
+        dataset.resources?.some((r) =>
+          selectedFormats.includes(r.format?.toUpperCase())
+        )
+
+      const matchesOrganization =
+        selectedOrganizations.length === 0 ||
+        selectedOrganizations.includes(dataset.organization?.name)
+
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        dataset.groups?.some((g) =>
+          selectedCategories.includes(g.display_name.toLowerCase())
+        )
+
+      const matchesGroup =
+        !groupParam || dataset.groups?.some((g) => g.name === groupParam)
+
+      const matchesSearch =
+        searchTerm.trim() === '' ||
+        dataset.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        dataset.notes.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        dataset.tags?.some((tag) =>
+          tag.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+
+      return (
+        matchesFormat &&
+        matchesOrganization &&
+        matchesCategory &&
+        matchesSearch &&
+        matchesGroup
       )
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.metadata_modified)
+      const dateB = new Date(b.metadata_modified)
 
-    const matchesOrganization =
-      selectedOrganizations.length === 0 ||
-      selectedOrganizations.includes(dataset.organization?.name)
+      if (sortOption === 'new') {
+        return dateB - dateA // más reciente primero
+      }
+      if (sortOption === 'old') {
+        return dateA - dateB // más antiguo primero
+      }
+      if (sortOption === 'relevant' && searchTerm.trim()) {
+        const term = searchTerm.toLowerCase()
+        const scoreA = a.title.toLowerCase().includes(term) ? 0 : 1
+        const scoreB = b.title.toLowerCase().includes(term) ? 0 : 1
+        return scoreA - scoreB // los que contienen el término primero
+      }
 
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      dataset.groups?.some((g) =>
-        selectedCategories.includes(g.display_name.toLowerCase())
-      )
+      return 0 // sin cambios si no aplica
+    })
 
-    const matchesGroup =
-      !groupParam || dataset.groups?.some((g) => g.name === groupParam)
+  useEffect(() => {
+    if (!userChangedSort.current) return
 
-    const matchesSearch =
-      searchTerm.trim() === '' ||
-      dataset.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dataset.notes.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dataset.tags?.some((tag) =>
-        tag.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    const labels = {
+      new: 'más reciente',
+      old: 'más antiguo',
+      relevant: 'más relevante',
+    }
 
-    return (
-      matchesFormat &&
-      matchesOrganization &&
-      matchesCategory &&
-      matchesSearch &&
-      matchesGroup
-    )
-  })
+    toast.success(`Orden aplicado: ${labels[sortOption]}`)
+  }, [sortOption])
 
   const handleCheckboxChange = (value, tempSelected, setTempSelected) => {
     setTempSelected((prev) =>
@@ -200,8 +241,22 @@ function Datasets() {
     }
   })
   const selectedGroupTitle = groupParam ? uniqueGroupMap.get(groupParam) : ''
-  console.log(filteredDatasets)
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [
+    searchTerm,
+    selectedFormats,
+    selectedOrganizations,
+    selectedCategories,
+    sortOption,
+  ])
+  const totalPages = Math.ceil(filteredDatasets.length / itemsPerPage)
+  const paginatedDatasets = filteredDatasets.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
 
+  const userChangedSort = useRef(false)
   return (
     <div className="px-20">
       <div className="flex flex-col mt-30 ">
@@ -243,10 +298,9 @@ function Datasets() {
         <p className="text-gray-600 mb-4">
           {cameFromOrg && selectedOrgTitle
             ? `Utiliza este buscador para localizar fácilmente los conjuntos de datos pertenecientes a "${toTitleCase(selectedOrgTitle)}".`
-            : 'Utiliza este buscador para localizar fácilmente los conjuntos de datos que necesites.' ||
-                (cameFromGroup && selectedGroupTitle)
-              ? `Utiliza este buscador para localizar fastballmente los conjuntos de datos pertenecientes al Grupo "${toTitleCase(selectedGroupTitle)}".`
-              : 'Utiliza este buscador para localizar fastballmente los conjuntos de datos que necesites.'}
+            : cameFromGroup && selectedGroupTitle
+              ? `Utiliza este buscador para localizar fácilmente los conjuntos de datos pertenecientes al grupo "${toTitleCase(selectedGroupTitle)}".`
+              : 'Utiliza este buscador para localizar fácilmente los conjuntos de datos que necesites.'}
         </p>
 
         <div className="flex flex-col gap-4 w-full">
@@ -259,7 +313,13 @@ function Datasets() {
             </p>
             <div className="flex items-center">
               <p className="text-sm me-2">Ordenar por</p>
-              <Select defaultValue={'relevant'}>
+              <Select
+                value={sortOption}
+                onValueChange={(value) => {
+                  userChangedSort.current = true
+                  setSortOption(value)
+                }}
+              >
                 <SelectTrigger
                   className="w-[170px] pe-2 border-none"
                   iconClassName="text-primary"
@@ -267,9 +327,9 @@ function Datasets() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="relevant">Más Relevante</SelectItem>
                   <SelectItem value="new">Más Reciente</SelectItem>
                   <SelectItem value="old">Más Antiguo</SelectItem>
+                  <SelectItem value="relevant">Más Relevante</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -303,7 +363,13 @@ function Datasets() {
 
           {/* Mobile: Ordenar por */}
           <div className="flex md:hidden items-center mt-2">
-            <Select defaultValue={'relevant'}>
+            <Select
+              value={sortOption}
+              onValueChange={(value) => {
+                userChangedSort.current = true
+                setSortOption(value)
+              }}
+            >
               <SelectTrigger
                 className="w-[170px] pe-2 border-none ms-auto"
                 iconClassName="text-primary"
@@ -311,9 +377,9 @@ function Datasets() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="relevant">Más Relevante</SelectItem>
                 <SelectItem value="new">Más Reciente</SelectItem>
                 <SelectItem value="old">Más Antiguo</SelectItem>
+                <SelectItem value="relevant">Más Relevante</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -365,9 +431,52 @@ function Datasets() {
           </Sheet>
 
           <DatasetList
-            filteredDatasets={filteredDatasets}
+            filteredDatasets={paginatedDatasets}
             searchTerm={searchTerm}
           />
+          {totalPages > 1 && (
+            <Pagination className="mt-6">
+              <PaginationContent className="flex justify-center gap-1">
+                <PaginationItem className="mx-2">
+                  <PaginationLink
+                    className="cursor-pointer text-primary w-17 hover:bg-primary-hover hover:text-white "
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    isActive={false}
+                    aria-disabled={currentPage === 1}
+                  >
+                    Anterior
+                  </PaginationLink>
+                </PaginationItem>
+
+                {[...Array(totalPages)].map((_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      className="cursor-pointer text-primary hover:bg-primary-hover hover:text-white"
+                      isActive={currentPage === i + 1}
+                      onClick={() => setCurrentPage(i + 1)}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem className="mx-2">
+                  <PaginationLink
+                    className="cursor-pointer text-primary w-17  hover:bg-primary-hover hover:text-white "
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    isActive={false}
+                    aria-disabled={currentPage === totalPages}
+                  >
+                    Siguiente
+                  </PaginationLink>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       </div>
     </div>

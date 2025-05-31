@@ -1,6 +1,7 @@
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
 import { Outlet } from 'react-router-dom'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Outlet />
       </main>
       <Footer />
+      <Toaster position="top-right" richColors />
     </div>
   )
 }

@@ -1,28 +1,25 @@
-// const BASE_URL = 'localhost:5000/api/3/action'
-const BASE_URL = '/api/3/action'
-//const BASE_URL = 'public/api/3/action'
+const BASE_URL = 'http://localhost:5000/api/3/action'
+//const BASE_URL = '/api/3/action'
 export const getDatasetCount = async () => {
-  // const res = await fetch(`${BASE_URL}/package_search?q=&rows=0`)
-  const res = await fetch(`${BASE_URL}/package_search.json`)
+  const res = await fetch(`${BASE_URL}/package_search?rows=1000`)
   const data = await res.json()
   return data.result.count
 }
 
 export const getOrganizations = async () => {
-  const res = await fetch(`${BASE_URL}/organization_list.json`)
+  const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
   const data = await res.json()
   return data.result.length
 }
 
 export const getGroupsWithCounts = async () => {
-  const res = await fetch(`${BASE_URL}/group_list.json`)
+  const res = await fetch(`${BASE_URL}/group_list?all_fields=true`)
   const data = await res.json()
 
   const groups = await Promise.all(
-    data.result.map(async (groupName) => {
+    data.result.map(async (group) => {
       const res = await fetch(
-        // `${BASE_URL}/group_show?id=${groupName}&include_dataset_count=true`
-        `${BASE_URL}/group_show?id=${groupName}.json`
+        `${BASE_URL}/group_show?id=${group.name}&include_dataset_count=true`
       )
       const groupData = await res.json()
       return {
@@ -38,13 +35,8 @@ export const getGroupsWithCounts = async () => {
 
 export const getAllDatasets = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/package_search.json`)
+    const response = await fetch(`${BASE_URL}/package_search?q=&rows=1000`)
     const data = await response.json()
-    console.log('📦 DATA COMPLETA:', data)
-    console.log('✅ data.success:', data.success)
-    console.log('✅ data.result:', data.result)
-    console.log('✅ data.result.results:', data.result?.results)
-
     return Array.isArray(data.result?.results) ? data.result.results : []
   } catch (error) {
     console.error('Error fetching datasets:', error)
@@ -53,15 +45,21 @@ export const getAllDatasets = async () => {
 }
 
 export const getOrganizationsWithInfo = async () => {
-  // const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
-  const res = await fetch(`${BASE_URL}/organization_list_all_fields.json`)
+  const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
   const data = await res.json()
   return data.result // contiene name, title, description, package_count, etc.
 }
 
 export const getAllGroups = async () => {
-  // const res = await fetch(`${BASE_URL}/group_list?all_fields=true`)
-  const res = await fetch(`${BASE_URL}/group_list.json`)
+  const res = await fetch(`${BASE_URL}/group_list?all_fields=true`)
+
   const json = await res.json()
   return json.result
+}
+
+export const getResourceById = async (id) => {
+  const res = await fetch(`${BASE_URL}/resource_show?id=${id}`)
+  const data = await res.json()
+  if (!data.success) throw new Error('No se pudo cargar el recurso.')
+  return data.result
 }

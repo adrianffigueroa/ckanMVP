@@ -21,8 +21,6 @@ function FiltersContent({
   setTempOrganizations,
   setTempCategories,
 }) {
-  console.log(uniqueCategories)
-
   return (
     <div className="max-w-[300px] w-full">
       <Accordion type="multiple" collapsible className="w-full">
