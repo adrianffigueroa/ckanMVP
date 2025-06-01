@@ -10,6 +10,12 @@ function App() {
   const [loadingTheme, setLoadingTheme] = useState(true)
 
   useEffect(() => {
+    const applyColors = (colores) => {
+      Object.entries(colores).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(`--${key}`, value)
+      })
+    }
+
     const cached = localStorage.getItem('themeConfig')
     if (cached) {
       applyColors(JSON.parse(cached))
