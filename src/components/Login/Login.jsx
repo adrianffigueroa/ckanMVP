@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader } from '../ui/card'
 
 export default function LoginForm() {
@@ -15,11 +14,15 @@ export default function LoginForm() {
           </h2>
         </CardHeader>
         <CardContent className="w-full text-center ">
-          <Link to="https://facilities-western-throughout-cement.trycloudflare.com/user/login">
+          <a
+            href="https://facilities-western-throughout-cement.trycloudflare.com/user/login"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button className="hover:cursor-pointer hover:bg-primary-hover">
               Iniciar Sesión
             </Button>
-          </Link>
+          </a>
         </CardContent>
       </Card>
     </section>
