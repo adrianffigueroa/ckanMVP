@@ -10,18 +10,19 @@ function App() {
   const [loadingTheme, setLoadingTheme] = useState(true)
 
   useEffect(() => {
-    getThemeFromUserAbout()
-      .then((colores) => {
+    const cached = localStorage.getItem('themeConfig')
+    if (cached) {
+      applyColors(JSON.parse(cached))
+      setLoadingTheme(false)
+    } else {
+      getThemeFromUserAbout().then((colores) => {
         if (colores) {
-          Object.entries(colores).forEach(([key, value]) => {
-            document.documentElement.style.setProperty(`--${key}`, value)
-          })
+          applyColors(colores)
+          localStorage.setItem('themeConfig', JSON.stringify(colores))
         }
+        setLoadingTheme(false)
       })
-      .catch(() => {
-        console.warn('❌ Tema visual no cargado, se usan colores por defecto.')
-      })
-      .finally(() => setLoadingTheme(false))
+    }
   }, [])
 
   if (loadingTheme) {
