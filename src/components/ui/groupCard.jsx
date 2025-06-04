@@ -46,7 +46,7 @@ const GroupCard = ({ title, datasets, group }) => {
   return (
     <div className="relative w-60 h-64 mx-auto">
       {/* Card with enhanced blurred border effect */}
-      <Card className="card-custom bg-body rounded-[40px] w-full h-10/11 flex flex-col items-center justify-start cursor-pointer">
+      <Card className="card-custom bg-body rounded-[40px] w-full h-10/11 flex flex-col items-center justify-start">
         <CardContent className="flex flex-col justify-between items-start w-full h-full px-4 py-2 z-10 hover:text-primary">
           {/* Contenedor superior con ícono, título y descripción */}
           <div className="flex flex-col items-start justify-start min-h-[96px] gap-1">
