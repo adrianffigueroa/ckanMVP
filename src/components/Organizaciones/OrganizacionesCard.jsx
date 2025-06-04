@@ -14,10 +14,10 @@ const OrganizacionesCard = ({ group }) => {
     <div>
       <Card className="h-60 w-full flex flex-col justify-between p-4 rounded-md shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white">
         <CardHeader className="p-0">
-          <CardTitle className="text-base font-semibold leading-tight">
+          <CardTitle className="text-base font-semibold leading-tight customColor1">
             {toTitleCase(group.title)}
           </CardTitle>
-          <CardDescription className="text-sm text-gray-500 mt-2 line-clamp-5">
+          <CardDescription className="text-sm customColor2 mt-2 line-clamp-5">
             {group.description}
           </CardDescription>
         </CardHeader>
@@ -26,7 +26,7 @@ const OrganizacionesCard = ({ group }) => {
           <Link to={`/datasets?org=${group.name}`}>
             <Button
               variant="outline"
-              className="w-full text-primary border-primary text-xs rounded-2xl h-6 hover:cursor-pointer hover:bg-primary-hover hover:text-white"
+              className="w-full text-primary border-primary text-xs rounded-2xl h-6 button-custom hover:cursor-pointer  hover:text-white"
             >
               Ver Datasets
             </Button>

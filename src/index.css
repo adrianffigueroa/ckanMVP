@@ -51,6 +51,32 @@
 }
 
 :root {
+  --primary: rgb(74, 58, 255);
+  --primary-r: 74;
+  --primary-g: 58;
+  --primary-b: 255;
+  --shadow-color-light: rgba(
+    var(--primary-r),
+    var(--primary-g),
+    var(--primary-b),
+    0.15
+  );
+  --shadow-color-medium: rgba(
+    var(--primary-r),
+    var(--primary-g),
+    var(--primary-b),
+    0.25
+  );
+  --shadow-color-dark: rgba(
+    var(--primary-r),
+    var(--primary-g),
+    var(--primary-b),
+    0.3
+  ) !important;
+  --decorator: rgb(243, 243, 255);
+  --customColor1: rgb(0, 0, 0);
+  --customColor1Hover: rgb(255, 255, 255);
+  --customColor2: rgb(75, 85, 99);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -59,12 +85,12 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
   /* --primary: oklch(0.208 0.042 265.755); */
-  --primary: oklch(0.52 0.272 274.81);
-  --primary-hover: oklch(0.31 0.1771 274.81);
+
+  --primary-hover: rgb(78, 65, 150);
   --primary-foreground: oklch(0.984 0.003 247.858);
   /* --secondary: oklch(0.968 0.007 247.896); */
   --body: oklch(0.98 0.0053 286.3);
-  --navBarHome: #edeaff;
+  --navBarHome: rgb(243, 242, 255);
   --third: rgba(164, 156, 255, 1);
   --bgIcon: rgba(57, 42, 230, 0.15);
   --secondary: rgba(240, 240, 255, 1);
@@ -90,6 +116,53 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+}
+
+.shadow-theme-light {
+  box-shadow: 0 20px 80px var(--shadow-color-light);
+}
+
+.shadow-theme-medium {
+  box-shadow: 0 20px 80px var(--shadow-color-medium);
+}
+
+.shadow-theme-dark {
+  box-shadow: 0 20px 80px var(--shadow-color-dark) !important;
+}
+
+.hover\\:shadow-theme-dark:hover {
+  box-shadow: 0 20px 120px var(--shadow-color-dark) !important;
+}
+
+.decorator {
+  background-color: var(--decorator);
+}
+
+.customColor2 {
+  color: var(--customColor2);
+}
+
+.customColor1 {
+  color: var(--customColor1);
+}
+
+.customColor1Hover:hover {
+  color: var(--customColor1Hover);
+}
+
+.card-custom {
+  box-shadow: 0 10px 50px var(--shadow-color-light);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+.card-custom:hover {
+  box-shadow: 0 10px 30px var(--shadow-color-dark);
+  transform: scale(1.03);
+}
+
+.button-custom:hover {
+  background-color: var(--primary-hover);
 }
 
 .dark {

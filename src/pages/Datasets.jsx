@@ -24,27 +24,25 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import SkeletonDatasetCard from '@/components/Datasets/SkeletonDatasetCard'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { useDatasets } from '@/hooks/useDatasets'
 import { useWindowWidth } from '@/hooks/useWindowWidth'
-import { getAllDatasets } from '@/services/ckanService'
 import { toTitleCase } from '@/utils/toTitleCase'
-import { useQuery } from '@tanstack/react-query'
 import { FilterIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'sonner'
 function Datasets() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['datasets'],
-    queryFn: getAllDatasets,
-  })
+  const { datasets, isLoading, isError, refetch, isUsingFallback } =
+    useDatasets()
 
-  const datasets = Array.isArray(data) ? data : []
+  const validDatasets = Array.isArray(datasets) ? datasets : []
 
   const orgSet = new Map()
 
-  if (Array.isArray(datasets)) {
-    datasets.forEach((d) => {
+  if (Array.isArray(validDatasets)) {
+    validDatasets.forEach((d) => {
       const org = d.organization
       if (org && org.name && org.title && !orgSet.has(org.name)) {
         orgSet.set(org.name, { name: org.name, title: org.title })
@@ -54,10 +52,10 @@ function Datasets() {
 
   const uniqueOrganizations = Array.from(orgSet.values())
 
-  const uniqueCategories = Array.isArray(datasets)
+  const uniqueCategories = Array.isArray(validDatasets)
     ? Array.from(
         new Set(
-          datasets
+          validDatasets
             .flatMap((d) =>
               Array.isArray(d.groups) ? d.groups.map((g) => g.display_name) : []
             )
@@ -66,10 +64,10 @@ function Datasets() {
       )
     : []
 
-  const uniqueFormats = Array.isArray(datasets)
+  const uniqueFormats = Array.isArray(validDatasets)
     ? Array.from(
         new Set(
-          datasets.flatMap((d) =>
+          validDatasets.flatMap((d) =>
             Array.isArray(d.resources)
               ? d.resources.map((r) => r.format?.toUpperCase()).filter(Boolean)
               : []
@@ -90,7 +88,7 @@ function Datasets() {
   const [tempCategories, setTempCategories] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 2
+  const itemsPerPage = 8
   const [sortOption, setSortOption] = useState('new')
   const params = new URLSearchParams(location.search)
   const orgParam = params.get('org')
@@ -98,7 +96,7 @@ function Datasets() {
   const cameFromOrg = !!orgParam
   const cameFromGroup = !!groupParam
 
-  const filteredDatasets = (datasets || [])
+  const filteredDatasets = (validDatasets || [])
     .filter((dataset) => {
       const matchesFormat =
         selectedFormats.length === 0 ||
@@ -154,6 +152,10 @@ function Datasets() {
 
       return 0 // sin cambios si no aplica
     })
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   useEffect(() => {
     if (!userChangedSort.current) return
@@ -233,7 +235,7 @@ function Datasets() {
   )
   const selectedOrgTitle = selectedOrgObject?.title || ''
 
-  const allGroups = datasets?.flatMap((d) => d.groups || [])
+  const allGroups = validDatasets?.flatMap((d) => d.groups || [])
   const uniqueGroupMap = new Map()
   allGroups?.forEach((g) => {
     if (g?.name && g?.display_name && !uniqueGroupMap.has(g.name)) {
@@ -264,17 +266,21 @@ function Datasets() {
           <Breadcrumb className="mb-4">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/" className="customColor2">
+                  Home
+                </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="customColor2" />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/datasets">Datasets</BreadcrumbLink>
+                <BreadcrumbLink href="/datasets" className="customColor2">
+                  Datasets
+                </BreadcrumbLink>
               </BreadcrumbItem>
               {(cameFromOrg && selectedOrgTitle && (
                 <>
-                  <BreadcrumbSeparator />
+                  <BreadcrumbSeparator className="customColor2" />
                   <BreadcrumbItem>
-                    <span className="text-gray-400">{selectedOrgTitle}</span>
+                    <span className="customColor2">{selectedOrgTitle}</span>
                   </BreadcrumbItem>
                 </>
               )) ||
@@ -282,9 +288,7 @@ function Datasets() {
                   <>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                      <span className="text-gray-400">
-                        {selectedGroupTitle}
-                      </span>
+                      <span className="customColor2">{selectedGroupTitle}</span>
                     </BreadcrumbItem>
                   </>
                 ))}
@@ -295,7 +299,7 @@ function Datasets() {
         <h2 className="text-3xl font-semibold text-primary">
           Buscador de Datasets
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p className="customColor2 mb-4">
           {cameFromOrg && selectedOrgTitle
             ? `Utiliza este buscador para localizar fácilmente los conjuntos de datos pertenecientes a "${toTitleCase(selectedOrgTitle)}".`
             : cameFromGroup && selectedGroupTitle
@@ -306,12 +310,12 @@ function Datasets() {
         <div className="flex flex-col gap-4 w-full">
           {/* Línea 1: cantidad + ordenar (md:flex) */}
           <div className="hidden md:flex items-center justify-between w-full">
-            <p className="text-sm">
+            <p className="text-sm customColor2">
               {filteredDatasets.length} conjunto
               {filteredDatasets.length !== 1 && 's'} encontrados
               {searchTerm ? ` para "${searchTerm}"` : ''}
             </p>
-            <div className="flex items-center">
+            <div className="flex items-center customColor2">
               <p className="text-sm me-2">Ordenar por</p>
               <Select
                 value={sortOption}
@@ -362,7 +366,7 @@ function Datasets() {
           </div>
 
           {/* Mobile: Ordenar por */}
-          <div className="flex md:hidden items-center mt-2">
+          <div className="flex md:hidden items-center mt-2 customColor2">
             <Select
               value={sortOption}
               onValueChange={(value) => {
@@ -430,10 +434,30 @@ function Datasets() {
             </SheetContent>
           </Sheet>
 
-          <DatasetList
-            filteredDatasets={paginatedDatasets}
-            searchTerm={searchTerm}
-          />
+          {isError && !isUsingFallback ? (
+            <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded-md text-sm">
+              ❌ Ocurrió un error al cargar los datasets desde CKAN y no hay
+              copia local disponible.
+              <button
+                onClick={() => refetch()}
+                className="mt-2 ml-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+              >
+                Reintentar
+              </button>
+            </div>
+          ) : isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[...Array(6)].map((_, i) => (
+                <SkeletonDatasetCard key={i} />
+              ))}
+            </div>
+          ) : (
+            <DatasetList
+              filteredDatasets={paginatedDatasets}
+              searchTerm={searchTerm}
+            />
+          )}
+
           {totalPages > 1 && (
             <Pagination className="mt-6">
               <PaginationContent className="flex justify-center gap-1">

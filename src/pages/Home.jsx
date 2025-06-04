@@ -57,11 +57,11 @@ const Home = () => {
         <h3 className="flex flex-col text-base items-center text-primary tracking-widest">
           PROVINCIA DE BUENOS AIRES
         </h3>
-        <h1 className="flex flex-col items-center text-4xl font-semibold text-center mt-4 mb-2 tracking-wide">
+        <h1 className="flex flex-col items-center text-4xl customColor1 font-semibold text-center mt-4 mb-2 tracking-wide">
           <span>Portal de datos abiertos</span>
           <span className="text-primary">Municipio de Quilmes</span>
         </h1>
-        <span className="text-sm text-center text-gray-600 font-normal my-4 w-3/4">
+        <span className="text-sm text-center customColor2 font-normal my-4 w-3/4">
           Diseñado para acceder, descargar y reutilizar información del sector
           <br />
           público para tus desarrollos e investigaciones.
@@ -77,9 +77,10 @@ const Home = () => {
 
       <section className="mt-16 md:mt-44 flex flex-col items-center">
         <h2 className="text-3xl font-semibold text-center">
-          Nuestros datos en <span className="text-primary">cifras</span>
+          <span className="customColor1">Nuestros datos en</span>{' '}
+          <span className="text-primary">cifras</span>
         </h2>
-        <span className="text-sm text-center text-gray-600 font-normal my-4 w-3/4">
+        <span className="text-sm text-center customColor2 font-normal my-4 w-3/4">
           Cumpliendo con estándares internacionales, ofrecemos información útil
           para organizaciones, ciudadanía y la comunidad investigadora.
         </span>
@@ -108,6 +109,8 @@ const Home = () => {
                     <Loader2 className="h-6 w-6 animate-spin text-primary" />
                   ) : errorOrgs ? (
                     'Error'
+                  ) : Array.isArray(organizations) ? (
+                    organizations.length
                   ) : (
                     organizations || 0
                   )
@@ -133,14 +136,15 @@ const Home = () => {
       </section>
       <section className="mb-22 flex text-center items-center justify-center mt-16 w-full relative overflow-visible">
         <div className="absolute inset-0">
-          <div className="w-[135%] lg:translate-x-[8%] bg-[rgba(240,240,255,0.8)] rounded-t-[150px] min-h-[600px]"></div>
+          <div className="w-[135%] lg:translate-x-[8%] decorator rounded-t-[150px] min-h-[600px]"></div>
         </div>
         <div className="relative z-10 w-full max-w-5xl text-center mx-auto">
           <h2 className="mt-20 md:mt-12 text-xl sm:text-2xl md:text-3xl font-semibold leading-relaxed mb-6">
-            Descubre los <span className="text-primary">últimos conjuntos</span>{' '}
-            <br /> de datos publicados
+            <span className="customColor1">Descubre los</span>{' '}
+            <span className="text-primary">últimos conjuntos</span> <br />{' '}
+            <span className="customColor1">de datos publicados</span>
           </h2>
-          <p className="text-gray-600 mx-auto text-center max-w-[85%] sm:max-w-xl md:max-w-2xl mb-10">
+          <p className="customColor2 mx-auto text-center max-w-[85%] sm:max-w-xl md:max-w-2xl mb-10">
             Explorá los conjuntos de datos más recientes que el Municipio pone a
             disposición para promover la transparencia, el conocimiento y la
             colaboración ciudadana.

@@ -11,47 +11,53 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card'
+
 const DatasetCard = ({ dataset }) => {
-  console.log(dataset)
+  if (!dataset || typeof dataset !== 'object') return null
+
+  const title = dataset.title ? toTitleCase(dataset.title) : 'Sin título'
+  const description = dataset.notes ?? 'Sin descripción'
+  const resources = Array.isArray(dataset.resources) ? dataset.resources : []
+
+  const formatsUnicos = [
+    ...new Set(
+      resources.filter((r) => r.format).map((r) => r.format.toUpperCase())
+    ),
+  ]
+
+  const ultimaActualizacion = resources[0]?.last_modified
+    ? formatDate(resources[0].last_modified)
+    : 'No disponible'
 
   return (
     <Link to={`/datasetsDetails/${dataset.id}`}>
       <Card className="p-2 rounded-md shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">
-            {toTitleCase(dataset.title)}
+          <CardTitle className="text-lg font-semibold customColor1">
+            {title}
           </CardTitle>
           <CardDescription className="text-sm text-gray-500">
-            {dataset.notes}
+            {description}
           </CardDescription>
         </CardHeader>
         <CardFooter className="flex justify-around">
-          <div className="flex">
-            {dataset && (
-              <div>
-                <>
-                  {[
-                    ...new Set(
-                      dataset?.resources?.map((r) => r.format.toUpperCase())
-                    ),
-                  ].map((format, idx) => (
-                    <Badge
-                      key={idx}
-                      className={`${getColorByFormat(format)} text-white text-xs px-3 py-1 mt-1 mr-1`}
-                    >
-                      {format}
-                    </Badge>
-                  ))}
-                </>
-                <p className="text-xs text-gray-500 mt-1">
-                  Última Actualización:{' '}
-                  {formatDate(dataset.resources?.[0]?.last_modified)}
-                </p>
-              </div>
-            )}
+          <div className="flex flex-col">
+            <div className="flex flex-wrap">
+              {formatsUnicos.map((format, idx) => (
+                <Badge
+                  key={idx}
+                  className={`${getColorByFormat(format)} text-white text-xs px-3 py-1 mt-1 mr-1`}
+                >
+                  {format}
+                </Badge>
+              ))}
+            </div>
+            <p className="text-xs customColor2 mt-1">
+              Última Actualización: {ultimaActualizacion}
+            </p>
           </div>
-          <div className="flex ms-auto">
-            <Button className="bg-primary text-white text-xs rounded-2xl w-20 h-8 hover:cursor-pointer hover:bg-primary-hover">
+          <div className="flex ms-auto items-center">
+            <Button className="bg-primary text-white text-xs rounded-2xl w-20 h-8 button-custom hover:cursor-pointer">
               Ver Dataset
             </Button>
           </div>

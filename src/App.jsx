@@ -1,37 +1,14 @@
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
+import { useThemeLoader } from '@/hooks/useThemeLoader'
 import { Loader2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import { getThemeFromUserAbout } from './utils/getThemeFromUserAbout'
 
 function App() {
-  const [loadingTheme, setLoadingTheme] = useState(true)
+  const isThemeReady = useThemeLoader()
 
-  useEffect(() => {
-    const applyColors = (colores) => {
-      Object.entries(colores).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(`--${key}`, value)
-      })
-    }
-
-    const cached = localStorage.getItem('themeConfig')
-    if (cached) {
-      applyColors(JSON.parse(cached))
-      setLoadingTheme(false)
-    } else {
-      getThemeFromUserAbout().then((colores) => {
-        if (colores) {
-          applyColors(colores)
-          localStorage.setItem('themeConfig', JSON.stringify(colores))
-        }
-        setLoadingTheme(false)
-      })
-    }
-  }, [])
-
-  if (loadingTheme) {
+  if (!isThemeReady) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-body text-gray-600 gap-4">
         <Loader2 className="animate-spin w-10 h-10 text-primary" />
@@ -39,6 +16,7 @@ function App() {
       </div>
     )
   }
+
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden bg-body">
       <Navbar className="top-0 left-0 right-0" />

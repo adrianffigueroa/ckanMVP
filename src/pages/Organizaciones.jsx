@@ -35,7 +35,7 @@ const Organizaciones = () => {
         <h2 className="text-3xl font-semibold text-primary">
           Buscador de Organizaciones
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p className="customColor2 mb-4">
           Explora el directorio de instituciones públicas que participan en la
           entrega de datos abiertos.
         </p>
@@ -49,7 +49,7 @@ const Organizaciones = () => {
 
         {/* Result count */}
         {!isLoading && !isError && (
-          <p className="text-sm mt-2">
+          <p className="text-sm mt-2 customColor2">
             {filteredorganizations.length} organizacion
             {filteredorganizations.length !== 1 && 'es'} encontradas
             {searchTerm ? ` para "${searchTerm}"` : ''}

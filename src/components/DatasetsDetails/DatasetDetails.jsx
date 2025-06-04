@@ -28,7 +28,10 @@ import {
   UserCheck,
   Users,
 } from 'lucide-react'
+import DocViewer, { DocViewerRenderers } from 'react-doc-viewer'
 import { useNavigate, useParams } from 'react-router-dom'
+
+import { useState } from 'react'
 const getGroupIcon = (groupName) => {
   const icons = {
     ciencia: Atom,
@@ -55,6 +58,8 @@ const getGroupIcon = (groupName) => {
 }
 
 const DatasetsDetails = () => {
+  const [showViewer, setShowViewer] = useState(false)
+  const [currentDoc, setCurrentDoc] = useState(null)
   const { id } = useParams()
 
   const {
@@ -74,10 +79,11 @@ const DatasetsDetails = () => {
     const format = res.format?.toLowerCase()
 
     if (['csv', 'xls', 'xlsx'].includes(format)) {
-      // Redirige a visualización con Rosen Charts
       navigate(`/resourceView/${res.id}`)
+    } else if (['doc', 'docx'].includes(format)) {
+      setCurrentDoc([{ uri: res.url, fileType: res.format }])
+      setShowViewer(true)
     } else {
-      // Abre visor externo para PDF, Word, etc.
       window.open(res.url, '_blank')
     }
   }
@@ -87,161 +93,186 @@ const DatasetsDetails = () => {
   }
 
   return (
-    <div className="px-20 mb-8">
-      <section>
-        <div className="flex flex-col mt-30">
-          <div className="flex flex-col md:flex-row items-start justify-between ">
-            <Breadcrumb className="mb-4">
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/datasets">Datasets</BreadcrumbLink>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+    <>
+      <div className="px-20 mb-8">
+        <section>
+          <div className="flex flex-col mt-30">
+            <div className="flex flex-col md:flex-row items-start justify-between ">
+              <Breadcrumb className="mb-4">
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/" className="customColor2">
+                      Home
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator className="customColor2" />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/datasets" className="customColor2">
+                      Datasets
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+            <h2 className="text-3xl font-semibold text-primary mb-4">
+              {'Datasets'}
+            </h2>
+            <p className="customColor1 font-semibold text-base mt-1">
+              {dataset?.title || 'Sin titulo'}
+            </p>
+            <p className="customColor2 text-base mt-1">
+              {dataset?.notes || 'Sin descripción'}
+            </p>
           </div>
-          <h2 className="text-3xl font-semibold text-primary mb-4">
-            {'Datasets'}
-          </h2>
-          <p className="text-black font-semibold text-base mt-1">
-            {dataset?.title || 'Sin titulo'}
-          </p>
-          <p className="text-gray-600 text-base mt-1">
-            {dataset?.notes || 'Sin descripción'}
-          </p>
-        </div>
 
-        <section className="mt-10 flex flex-col md:flex-row gap-10">
-          {/* Columna izquierda */}
-          <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
-            <p className="text-gray-600">{dataset?.description}</p>
+          <section className="mt-10 flex flex-col md:flex-row gap-10">
+            {/* Columna izquierda */}
+            <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
+              <p className="customColor2">{dataset?.description}</p>
 
-            <div className="flex flex-col gap-2 h-1/4">
-              {dataset?.resources.map((res, index) => (
-                <div
-                  key={res.id || index}
-                  className="flex justify-end items-start gap-4 border-b pb-4"
-                >
-                  {/* Izquierda: formato + info */}
-                  <div className="flex items-start me-auto gap-3">
-                    <Badge
-                      className={`${getColorByFormat(res.format)} text-white text-xs px-3 py-1 mt-1`}
-                    >
-                      {res.format?.toUpperCase()}
-                    </Badge>
-                    <div className="flex flex-col">
-                      <a
-                        href={res.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary font-medium text-sm hover:underline"
+              <div className="flex flex-col gap-2 h-1/4">
+                {dataset?.resources.map((res, index) => (
+                  <div
+                    key={res.id || index}
+                    className="flex flex-col sm:flex-row gap-4 border-b pb-4"
+                  >
+                    {/* Izquierda: formato + info */}
+                    <div className="flex gap-3 flex-grow">
+                      <Badge
+                        className={`${getColorByFormat(res.format)} text-white text-xs px-3 py-1 mt-1`}
                       >
-                        {res.name}
-                      </a>
-                      <p className="text-sm text-gray-600">
-                        {res.description || res.notes || 'Sin descripción'}
-                      </p>
+                        {res.format?.toUpperCase()}
+                      </Badge>
+                      <div className="flex flex-col">
+                        <a
+                          href={res.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary font-medium text-sm hover:underline break-all"
+                        >
+                          {res.name}
+                        </a>
+                        <p className="text-sm customColor2 break-words">
+                          {res.description || res.notes || 'Sin descripción'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Button
+                        onClick={() => handleDownload(res)}
+                        className="w-full sm:w-24 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                      >
+                        Descargar <Download size={14} />
+                      </Button>
+                      <Button
+                        onClick={() => handleVerRecurso(res)}
+                        className="w-full sm:w-28 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                      >
+                        Ver Recurso <Eye size={14} />
+                      </Button>
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
 
-                  {/* Derecha: botón descarga */}
-                  <div className="flex gap-2 w-full sm:w-auto">
-                    <Button
-                      onClick={() => handleDownload(res)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex ms-auto items-center gap-1 w-24 h-8 rounded-xl bg-primary text-sm text-white hover:cursor-pointer hover:bg-primary-hover"
-                    >
-                      Descargar <Download size={14} className="text-white" />
-                    </Button>
-                    <Button
-                      className={
-                        'bg-primary text-white text-sm rounded-xl w-28 h-8 hover:cursor-pointer hover:bg-primary-hover'
-                      }
-                      onClick={() => handleVerRecurso(res)}
-                    >
-                      Ver Recurso <Eye size={14} className="text-white" />
-                    </Button>
+            {/* Columna derecha */}
+            <div className="w-full lg:w-1/3 bg-white rounded-xl p-5 shadow border border-gray-200">
+              <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
+                <div className="flex gap-4">
+                  <div className="flex items-center">
+                    {getGroupIcon(dataset?.groups[0].name)}
+                  </div>
+                  <div className="w-full">
+                    <p className="customColor2 text-sm">Desarrollado por</p>
+                    <p className="font-semibold customColor1">
+                      {toTitleCase(dataset?.organization?.title) ||
+                        'Organización desconocida'}
+                    </p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Columna derecha */}
-          <div className="w-full lg:w-1/3 bg-white rounded-xl p-5 shadow border border-gray-200">
-            <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
-              <div className="flex gap-4">
-                <div className="flex items-center">
-                  {getGroupIcon(dataset?.groups[0].name)}
-                </div>
-                <div className="w-full">
-                  <p className="text-gray-600 text-sm">Desarrollado por</p>
-                  <p className="font-semibold">
-                    {toTitleCase(dataset?.organization?.title) ||
-                      'Organización desconocida'}
-                  </p>
-                </div>
+                <p className="customColor2 text-base mb-4">
+                  {dataset?.organization?.description || 'Sin descripción'}
+                </p>
               </div>
-              <p className="text-gray-600 text-base mb-4">
-                {dataset?.organization?.description || 'Sin descripción'}
-              </p>
+              <ul className="text-sm space-y-8 mt-4">
+                <li className="grid grid-cols-2 items-start">
+                  <div className="customColor1 font-semibold">Estado</div>
+                  <div
+                    className={`${dataset?.state === 'active' ? 'text-green-600' : 'text-red-600'} font-semibold`}
+                  >
+                    {dataset?.state === 'active' ? 'Activo' : 'Inactivo'}
+                  </div>
+                </li>
+                <li className="grid grid-cols-2 items-start">
+                  <div className="customColor1 font-semibold">
+                    Última actualización
+                  </div>
+                  <div className="customColor2">
+                    {dataset?.resources?.[0]?.last_modified
+                      ? new Date(
+                          dataset.resources[0].last_modified
+                        ).toLocaleDateString('es-AR')
+                      : 'No disponible'}
+                  </div>
+                </li>
+                <li className="grid grid-cols-2 items-start">
+                  <div className="customColor1 font-semibold">
+                    Fecha de creación
+                  </div>
+                  <div className="customColor2">
+                    {dataset?.metadata_created
+                      ? new Date(dataset.metadata_created).toLocaleDateString(
+                          'es-AR'
+                        )
+                      : 'No disponible'}
+                  </div>
+                </li>
+                <li className="grid grid-cols-2 items-start">
+                  <div className="customColor1 font-semibold mt-1">
+                    Etiquetas
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {dataset?.tags?.map((tag) => (
+                      <Badge
+                        key={tag.name}
+                        variant="outline"
+                        className="bg-white customColor2"
+                      >
+                        {tag.name}
+                      </Badge>
+                    ))}
+                  </div>
+                </li>
+              </ul>
             </div>
-            <ul className="text-sm space-y-8 mt-4">
-              <li className="grid grid-cols-2 items-start">
-                <div className="text-black font-semibold">Estado</div>
-                <div
-                  className={`${dataset?.state === 'active' ? 'text-green-600' : 'text-red-600'} font-semibold`}
-                >
-                  {dataset?.state === 'active' ? 'Activo' : 'Inactivo'}
-                </div>
-              </li>
-              <li className="grid grid-cols-2 items-start">
-                <div className="text-black font-semibold">
-                  Última actualización
-                </div>
-                <div className="text-gray-600">
-                  {dataset?.resources?.[0]?.last_modified
-                    ? new Date(
-                        dataset.resources[0].last_modified
-                      ).toLocaleDateString('es-AR')
-                    : 'No disponible'}
-                </div>
-              </li>
-              <li className="grid grid-cols-2 items-start">
-                <div className="text-black font-semibold">
-                  Fecha de creación
-                </div>
-                <div className="text-gray-600">
-                  {dataset?.metadata_created
-                    ? new Date(dataset.metadata_created).toLocaleDateString(
-                        'es-AR'
-                      )
-                    : 'No disponible'}
-                </div>
-              </li>
-              <li className="grid grid-cols-2 items-start">
-                <div className="text-black font-semibold mt-1">Etiquetas</div>
-                <div className="flex flex-wrap gap-2">
-                  {dataset?.tags?.map((tag) => (
-                    <Badge
-                      key={tag.name}
-                      variant="outline"
-                      className="bg-white text-gray-600"
-                    >
-                      {tag.name}
-                    </Badge>
-                  ))}
-                </div>
-              </li>
-            </ul>
-          </div>
+          </section>
         </section>
-      </section>
-    </div>
+      </div>
+      {showViewer && currentDoc && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-4xl h-[90vh] p-4 relative flex flex-col">
+            <button
+              onClick={() => setShowViewer(false)}
+              className="absolute top-2 right-2 text-gray-600 hover:text-black text-sm border px-2 py-1 rounded"
+            >
+              Cerrar ✕
+            </button>
+            <h2 className="text-lg font-semibold mb-4">
+              Previsualizador de Word
+            </h2>
+            <div className="flex-1 overflow-hidden">
+              <DocViewer
+                documents={currentDoc}
+                pluginRenderers={DocViewerRenderers}
+                style={{ height: '100%', width: '100%' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

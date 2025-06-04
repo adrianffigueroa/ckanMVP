@@ -1,6 +1,5 @@
-//const BASE_URL = 'http://localhost:5000/api/3/action'
-const BASE_URL =
-  'https://facilities-western-throughout-cement.trycloudflare.com/api/3/action'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 export const getDatasetCount = async () => {
   const res = await fetch(`${BASE_URL}/package_search?rows=1000`)
   const data = await res.json()

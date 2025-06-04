@@ -1,11 +1,45 @@
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Menu } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const CKAN_ADMIN_USERNAME = import.meta.env.VITE_CKAN_ADMIN_USERNAME
 const Navbar = () => {
+  const [open, setOpen] = useState(false)
+  const [logoURL, setLogoURL] = useState(null)
   const location = useLocation()
   const isHome = location.pathname === '/'
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const fetchLogo = async () => {
+        try {
+          const res = await fetch(
+            `${BASE_URL}/user_show?id=${CKAN_ADMIN_USERNAME}`
+          )
+          const data = await res.json()
+
+          let image = data.result?.image_url
+          if (image) {
+            // Si la imagen no incluye URL absoluta, construimos una
+            if (!image.startsWith('http')) {
+              image = `${BASE_URL.replace('/api/3/action', '')}/uploads/user/${image}`
+            }
+            setLogoURL(image)
+          }
+        } catch (err) {
+          console.warn('⚠️ No se pudo obtener el logo del admin:', err)
+        }
+      }
+
+      fetchLogo()
+    }, 300) // ⏱️ Espera 300 ms
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <div
       className={`fixed top-0 left-0 w-full z-50 py-4 transition-colors duration-300 ${
@@ -16,8 +50,16 @@ const Navbar = () => {
       <div className="flex items-center w-full px-20 justify-between">
         {/* Logo */}
         <div className="hidden custom-md:flex">
-          <Link to="/" className="text-xl font-bold text-blue-600">
-            CKAN Cliente
+          <Link to="/" className="flex items-center gap-2">
+            {logoURL ? (
+              <img
+                src={logoURL}
+                alt="Logo"
+                className="w-12 h-12 rounded-full"
+              />
+            ) : (
+              <span className="text-xl font-bold text-primary">Logo</span>
+            )}
           </Link>
         </div>
         {/* Links centrados */}
@@ -65,22 +107,24 @@ const Navbar = () => {
         </div>
 
         {/* Botón derecho */}
-        <div className="hidden custom-md:flex">
-          <Button className="rounded-3xl bg-primary text-white hover:bg-primary-hover transition duration-300 ease-in-out">
-            <Link to="/login" className="text-sm font-medium">
-              Iniciar Sesión
-            </Link>
-          </Button>
-        </div>
+        <div className="hidden custom-md:flex"></div>
       </div>
       {/* Menú mobile con Sheet */}
       <div className="flex justify-between custom-md:hidden px-4">
         <div className="flex custom-md:hidden">
-          <Link to="/" className="text-xl font-bold text-blue-600">
-            CKAN Cliente
+          <Link to="/" className="flex items-center gap-2">
+            {logoURL ? (
+              <img
+                src={logoURL}
+                alt="Logo"
+                className="w-12 h-12 rounded-full"
+              />
+            ) : (
+              <span className="text-xl font-bold text-primary">Logo</span>
+            )}
           </Link>
         </div>
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button
               variant="ghost"
@@ -94,33 +138,32 @@ const Navbar = () => {
             <nav className="flex flex-col gap-8">
               <Link
                 to="/datasets"
+                onClick={() => setOpen(false)}
                 className="mt-12 text-sm text-gray-500 font-semibold hover:text-primary"
               >
                 Datasets
               </Link>
               <Link
                 to="/organizaciones"
+                onClick={() => setOpen(false)}
                 className="text-sm text-gray-500 font-semibold hover:text-primary"
               >
                 Organizaciones
               </Link>
               <Link
                 to="/grupos"
+                onClick={() => setOpen(false)}
                 className="text-sm text-gray-500 font-semibold hover:text-primary"
               >
                 Grupos
               </Link>
               <Link
-                to="/"
+                to="/about"
+                onClick={() => setOpen(false)}
                 className="text-sm text-gray-500 font-semibold hover:text-primary"
               >
                 Acerca de
               </Link>
-              <Button className="rounded-3xl bg-primary text-white hover:bg-primary-hover transition duration-300 ease-in-out">
-                <Link to="/login" className="text-sm font-medium">
-                  Iniciar Sesión
-                </Link>
-              </Button>
             </nav>
           </SheetContent>
         </Sheet>

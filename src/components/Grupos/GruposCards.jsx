@@ -50,11 +50,11 @@ const GruposCards = ({ group }) => {
         <CardHeader className="p-0">
           <div className="flex items-center gap-3">
             {getGroupIcon(group?.name)}
-            <CardTitle className="text-base font-semibold leading-tight">
+            <CardTitle className="text-base font-semibold leading-tight customColor1">
               {toTitleCase(group?.name)}
             </CardTitle>
           </div>
-          <CardDescription className="text-sm text-gray-500 mt-2 line-clamp-5">
+          <CardDescription className="text-sm customColor2 mt-2 line-clamp-5">
             {group?.description}
           </CardDescription>
         </CardHeader>
@@ -62,7 +62,7 @@ const GruposCards = ({ group }) => {
         <div className="flex justify-center p-0">
           <Button
             asChild
-            className="bg-primary text-white text-sm px-4 py-2 rounded-xl"
+            className="bg-primary button-custom text-white text-sm px-4 py-2 rounded-xl hover:cursor-pointer"
           >
             <Link to={`/datasets?group=${group.name}`}>Ver Datasets</Link>
           </Button>

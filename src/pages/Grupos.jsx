@@ -31,11 +31,11 @@ const Grupos = () => {
         <h2 className="text-3xl font-semibold text-primary">
           Buscador de Grupos
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p className="customColor2 mb-4">
           Descubre los diferentes temas en los que se agrupan los conjuntos de
           datos abiertos.
         </p>
-        <p className="text-sm mt-2">
+        <p className="text-sm mt-2 customColor2">
           {filteredGroups.length} grupo{filteredGroups.length !== 1 && 's'}{' '}
           encontrados
           {searchTerm ? ` para "${searchTerm}"` : ''}

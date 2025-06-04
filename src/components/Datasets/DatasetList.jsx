@@ -4,7 +4,7 @@ const DatasetList = ({ filteredDatasets, searchTerm }) => {
   return (
     <>
       {filteredDatasets.length === 0 && (
-        <p className="text-gray-600 mb-4 ">
+        <p className="customColor2 mb-4 ">
           No se encontraron datasets para la búsqueda "{searchTerm}"
         </p>
       )}

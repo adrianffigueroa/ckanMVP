@@ -21,6 +21,7 @@ function FiltersContent({
   setTempOrganizations,
   setTempCategories,
 }) {
+  console.log(tempCategories)
   return (
     <div className="max-w-[300px] w-full">
       <Accordion type="multiple" collapsible className="w-full">
@@ -28,9 +29,11 @@ function FiltersContent({
         {!hideOrganizations && (
           <AccordionItem
             value="organizaciones"
-            className="mb-4 shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white"
+            className="mb-4 shadow-theme-light bg-white"
           >
-            <AccordionTrigger>Organizaciones</AccordionTrigger>
+            <AccordionTrigger className="customColor1">
+              Organizaciones
+            </AccordionTrigger>
             <AccordionContent className="mt-2">
               {uniqueOrganizations.map((org) => (
                 <div key={org.name} className="flex items-center mb-2">
@@ -49,7 +52,7 @@ function FiltersContent({
                   />
                   <label
                     htmlFor={`org-${org.name}`}
-                    className="text-sm text-gray-700"
+                    className="text-sm customColor2"
                   >
                     {org.title || org.name}
                   </label>
@@ -63,19 +66,21 @@ function FiltersContent({
         {!hideCategories && (
           <AccordionItem
             value="categorias"
-            className="mb-4 shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white"
+            className="mb-4 shadow-theme-light bg-white"
           >
-            <AccordionTrigger>Categorías</AccordionTrigger>
+            <AccordionTrigger className="customColor1">
+              Categorías
+            </AccordionTrigger>
             <AccordionContent className="mt-2">
               {uniqueCategories.map((cat) => (
                 <div key={cat} className="flex items-center mb-2">
                   <input
                     type="checkbox"
                     id={`cat-${cat}`}
-                    checked={tempCategories.includes(cat)}
+                    checked={tempCategories.includes(cat.toLowerCase())}
                     onChange={() =>
                       handleCheckboxChange(
-                        cat,
+                        cat.toLowerCase(),
                         tempCategories,
                         setTempCategories
                       )
@@ -84,7 +89,7 @@ function FiltersContent({
                   />
                   <label
                     htmlFor={`cat-${cat}`}
-                    className="text-sm text-gray-700"
+                    className="text-sm customColor2"
                   >
                     {cat}
                   </label>
@@ -97,9 +102,9 @@ function FiltersContent({
         {/* 🟡 Formatos */}
         <AccordionItem
           value="formatos"
-          className="mb-4 shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white"
+          className="mb-4 shadow-theme-light bg-white"
         >
-          <AccordionTrigger>Formatos</AccordionTrigger>
+          <AccordionTrigger className="customColor1">Formatos</AccordionTrigger>
           <AccordionContent className="mt-2">
             {uniqueFormats.map((format) => (
               <div key={format} className="flex items-center mb-2">
@@ -114,7 +119,7 @@ function FiltersContent({
                 />
                 <label
                   htmlFor={`format-${format}`}
-                  className="text-sm text-gray-700"
+                  className="text-sm customColor2"
                 >
                   {format}
                 </label>
@@ -125,18 +130,17 @@ function FiltersContent({
       </Accordion>
 
       {/* Botones */}
-      <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center justify-evenly mt-4">
         <Button
           onClick={handleApplyFilters}
-          className="px-1 text-primary bg-white hover:cursor-pointer hover:bg-[rgba(74,58,255,0.1)]
-"
+          className="px-0.5 text-primary button-custom bg-white hover:cursor-pointer hover:text-white"
         >
           Aplicar Filtros
         </Button>
         <Button
           onClick={handleCleanFilters}
           variant=""
-          className="px-1 text-primary bg-white hover:cursor-pointer hover:bg-[rgba(74,58,255,0.1)]"
+          className="px-0.5 text-primary bg-white button-custom hover:text-white hover:cursor-pointer"
         >
           Limpiar Filtros
         </Button>
