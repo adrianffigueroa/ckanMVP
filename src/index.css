@@ -90,7 +90,7 @@
   --primary-foreground: oklch(0.984 0.003 247.858);
   /* --secondary: oklch(0.968 0.007 247.896); */
   --body: oklch(0.98 0.0053 286.3);
-  --navBarHome: rgb(243, 242, 255);
+  --navBarHome: rgb(237, 235, 252);
   --third: rgba(164, 156, 255, 1);
   --bgIcon: rgba(57, 42, 230, 0.15);
   --secondary: rgba(240, 240, 255, 1);
