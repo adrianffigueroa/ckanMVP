@@ -62,7 +62,7 @@ export default function CustomCarousel({ items }) {
     <div className="w-full overflow-hidden">
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth"
+        className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth select-none"
         onMouseDown={onMouseDown}
         onMouseLeave={onMouseLeave}
         onMouseUp={onMouseUp}

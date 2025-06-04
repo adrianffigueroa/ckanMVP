@@ -24,6 +24,7 @@ export const getGroupsWithCounts = async () => {
       const groupData = await res.json()
       return {
         name: groupData.result.name,
+        description: groupData.result.description,
         display_name: groupData.result.display_name,
         package_count: groupData.result.package_count,
       }

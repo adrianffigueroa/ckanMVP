@@ -39,16 +39,29 @@ const getGroupIcon = (groupName) => {
     </div>
   )
 }
-const GroupCard = ({ title, datasets }) => {
+const GroupCard = ({ title, datasets, group }) => {
+  console.log(title, datasets)
+  console.log(group)
+
   return (
     <div className="relative w-60 h-64 mx-auto">
       {/* Card with enhanced blurred border effect */}
       <Card className="card-custom bg-body rounded-[40px] w-full h-10/11 flex flex-col items-center justify-start cursor-pointer">
         <CardContent className="flex flex-col justify-between items-start w-full h-full px-4 py-2 z-10 hover:text-primary">
-          <div className="mb-0">{getGroupIcon(title)}</div>
-          <h3 className="text-base font-semibold leading-tight min-h-[36px] flex items-start">
-            {title}
-          </h3>
+          {/* Contenedor superior con ícono, título y descripción */}
+          <div className="flex flex-col items-start justify-start min-h-[96px] gap-1">
+            {getGroupIcon(title)}
+
+            <h3 className="text-base font-semibold leading-tight mt-2">
+              {title}
+            </h3>
+
+            <p className="text-sm text-muted-foreground leading-snug">
+              {group.description}
+            </p>
+          </div>
+
+          {/* Conjuntos de datos */}
           <p className="text-gray-500 text-sm mt-4">
             {datasets}{' '}
             {datasets === 1 ? 'conjunto de datos' : 'conjuntos de datos'}

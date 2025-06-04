@@ -28,7 +28,6 @@ import {
   UserCheck,
   Users,
 } from 'lucide-react'
-import DocViewer, { DocViewerRenderers } from 'react-doc-viewer'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useState } from 'react'
@@ -81,7 +80,7 @@ const DatasetsDetails = () => {
     if (['csv', 'xls', 'xlsx'].includes(format)) {
       navigate(`/resourceView/${res.id}`)
     } else if (['doc', 'docx'].includes(format)) {
-      setCurrentDoc([{ uri: res.url, fileType: res.format }])
+      setCurrentDoc([{ uri: res.url }]) // Ya no necesitás `fileType`
       setShowViewer(true)
     } else {
       window.open(res.url, '_blank')
@@ -263,11 +262,19 @@ const DatasetsDetails = () => {
               Previsualizador de Word
             </h2>
             <div className="flex-1 overflow-hidden">
-              <DocViewer
-                documents={currentDoc}
-                pluginRenderers={DocViewerRenderers}
-                style={{ height: '100%', width: '100%' }}
-              />
+              {currentDoc?.[0]?.uri ? (
+                <iframe
+                  src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                    currentDoc[0].uri
+                  )}&embedded=true`}
+                  title="Doc Viewer"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 'none' }}
+                />
+              ) : (
+                <p className="text-red-500">No se pudo cargar el documento.</p>
+              )}
             </div>
           </div>
         </div>

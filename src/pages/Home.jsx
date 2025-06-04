@@ -159,6 +159,7 @@ const Home = () => {
                 : (groups || []).map((group) => (
                     <GroupCard
                       key={group.name}
+                      group={group}
                       title={group.display_name}
                       datasets={group.package_count ?? 0}
                     />
