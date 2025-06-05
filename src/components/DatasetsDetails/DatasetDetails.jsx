@@ -75,6 +75,8 @@ const DatasetsDetails = () => {
 
   const navigate = useNavigate()
   const handleVerRecurso = (res) => {
+    console.log(res)
+
     const format = res.format?.toLowerCase()
 
     if (['csv', 'xls', 'xlsx'].includes(format)) {
@@ -90,6 +92,8 @@ const DatasetsDetails = () => {
   const handleDownload = (res) => {
     window.open(res.url, '_blank')
   }
+  console.log(dataset)
+  console.log(allDatasets)
 
   return (
     <>
