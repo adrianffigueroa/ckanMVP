@@ -68,8 +68,7 @@
 // }
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
-const PUBLIC_CKAN_URL =
-  'https://powerseller-motion-protecting-reality.trycloudflare.com'
+const PUBLIC_CKAN_URL = 'http://95.216.148.201'
 
 const fixResourceUrls = (datasets) => {
   return datasets.map((dataset) => {
