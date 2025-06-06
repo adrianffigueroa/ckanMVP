@@ -1,5 +1,6 @@
 const BASE_URL =
-  VITE_API_BASE_URL || 'https://ckan-data-project.duckdns.org/api/3/action'
+  import.meta.env.VITE_API_BASE_URL ||
+  'https://ckan-data-project.duckdns.org/api/3/action'
 
 export const getDatasetCount = async () => {
   const res = await fetch(`${BASE_URL}/package_search?rows=1000`)
