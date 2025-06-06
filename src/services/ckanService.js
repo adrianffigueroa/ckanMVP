@@ -68,7 +68,8 @@
 // }
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
-const PUBLIC_CKAN_URL = 'https://cornell-tommy-cube-hood.trycloudflare.com'
+const PUBLIC_CKAN_URL =
+  'https://registration-thousand-wishes-renew.trycloudflare.com'
 
 const fixResourceUrls = (datasets) => {
   return datasets.map((dataset) => {
