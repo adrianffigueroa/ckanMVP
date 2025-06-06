@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const BASE_URL = 'http://95.216.148.201/api/3/action'
 
 export const getDatasetCount = async () => {
   const res = await fetch(`${BASE_URL}/package_search?rows=1000`)
