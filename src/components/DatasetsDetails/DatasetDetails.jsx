@@ -65,9 +65,15 @@ const DatasetsDetails = () => {
     data: dataset,
     isLoading,
     isError,
+    error,
+    isFetching,
   } = useQuery({
     queryKey: ['dataset', id],
-    queryFn: () => getDatasetById(id),
+    queryFn: () => {
+      console.log('🔥 Ejecutando getDatasetById con id:', id)
+      return getDatasetById(id)
+    },
+    enabled: !!id, // muy importante, para que no se ejecute con id undefined
   })
 
   const navigate = useNavigate()
@@ -90,7 +96,11 @@ const DatasetsDetails = () => {
     window.open(res.url, '_blank')
   }
   console.log(dataset)
-
+  console.log('dataset', dataset)
+  console.log('isLoading', isLoading)
+  console.log('isError', isError)
+  console.log('error', error)
+  console.log('isFetching', isFetching)
   if (isError) return <p>Hubo un error</p>
 
   if (isLoading) return <p>Cargando...</p>
