@@ -20,7 +20,7 @@ export const getThemeFromUserAbout = async () => {
         secondary: '#1c6b08',
         body: '#ffffff',
       },
-      version: '1',
+      version: '1.0.0',
     }
   }
 }
