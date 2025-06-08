@@ -59,6 +59,7 @@ const DatasetsDetails = () => {
   const [showViewer, setShowViewer] = useState(false)
   const [currentDoc, setCurrentDoc] = useState(null)
   const { id } = useParams()
+  console.log(id)
 
   const {
     data: dataset,
