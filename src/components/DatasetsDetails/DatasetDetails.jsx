@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
+import { getDatasetById } from '@/services/ckanService'
 import getColorByFormat from '@/utils/getColorsByFormat'
 import { toTitleCase } from '@/utils/toTitleCase'
 import { useQuery } from '@tanstack/react-query'
@@ -27,9 +28,8 @@ import {
   UserCheck,
   Users,
 } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
-
 import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 const getGroupIcon = (groupName) => {
   const icons = {
     ciencia: Atom,
