@@ -93,7 +93,6 @@ const DatasetsDetails = () => {
     window.open(res.url, '_blank')
   }
   console.log(dataset)
-  console.log(allDatasets)
 
   return (
     <>
