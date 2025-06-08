@@ -70,10 +70,6 @@ const DatasetsDetails = () => {
     queryFn: () => getDatasetById(id),
   })
 
-  // const dataset = Array.isArray(allDatasets)
-  //   ? allDatasets.find((d) => d.id === id)
-  //   : null
-
   const navigate = useNavigate()
   const handleVerRecurso = (res) => {
     console.log(res)
@@ -95,10 +91,13 @@ const DatasetsDetails = () => {
   }
   console.log(dataset)
 
+  if (isError) return <p>Hubo un error</p>
+
+  if (isLoading) return <p>Cargando...</p>
+
+  if (!dataset) return <p>No se encontró el dataset</p>
   return (
     <>
-      {isError && <p>Hubo un error</p>}
-      {isLoading && <p>Cargando...</p>}
       <div className="px-20 mb-8">
         <section>
           <div className="flex flex-col mt-30">
@@ -133,52 +132,59 @@ const DatasetsDetails = () => {
           <section className="mt-10 flex flex-col md:flex-row gap-10">
             {/* Columna izquierda */}
             <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
-              <p className="customColor2">{dataset?.description}</p>
+              <p className="customColor2">{dataset?.notes}</p>
 
               <div className="flex flex-col gap-2 h-1/4">
-                {dataset?.resources.map((res, index) => (
-                  <div
-                    key={res.id || index}
-                    className="flex flex-col sm:flex-row gap-4 border-b pb-4"
-                  >
-                    {/* Izquierda: formato + info */}
-                    <div className="flex gap-3 flex-grow">
-                      <Badge
-                        className={`${getColorByFormat(res.format)} text-white text-xs px-3 py-1 mt-1`}
-                      >
-                        {res.format?.toUpperCase()}
-                      </Badge>
-                      <div className="flex flex-col">
-                        <a
-                          href={res.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary font-medium text-sm hover:underline break-all"
+                {Array.isArray(dataset?.resources) &&
+                dataset.resources.length > 0 ? (
+                  dataset?.resources.map((res, index) => (
+                    <div
+                      key={res.id || index}
+                      className="flex flex-col sm:flex-row gap-4 border-b pb-4"
+                    >
+                      {/* Izquierda: formato + info */}
+                      <div className="flex gap-3 flex-grow">
+                        <Badge
+                          className={`${getColorByFormat(res.format)} text-white text-xs px-3 py-1 mt-1`}
                         >
-                          {res.name}
-                        </a>
-                        <p className="text-sm customColor2 break-words">
-                          {res.description || res.notes || 'Sin descripción'}
-                        </p>
+                          {res.format?.toUpperCase()}
+                        </Badge>
+                        <div className="flex flex-col">
+                          <a
+                            href={res.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary font-medium text-sm hover:underline break-all"
+                          >
+                            {res.name}
+                          </a>
+                          <p className="text-sm customColor2 break-words">
+                            {res.description || 'Sin descripción'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <Button
+                          onClick={() => handleDownload(res)}
+                          className="w-full sm:w-24 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                        >
+                          Descargar <Download size={14} />
+                        </Button>
+                        <Button
+                          onClick={() => handleVerRecurso(res)}
+                          className="w-full sm:w-28 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                        >
+                          Ver Recurso <Eye size={14} />
+                        </Button>
                       </div>
                     </div>
-
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <Button
-                        onClick={() => handleDownload(res)}
-                        className="w-full sm:w-24 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
-                      >
-                        Descargar <Download size={14} />
-                      </Button>
-                      <Button
-                        onClick={() => handleVerRecurso(res)}
-                        className="w-full sm:w-28 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
-                      >
-                        Ver Recurso <Eye size={14} />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    No hay recursos disponibles
+                  </p>
+                )}
               </div>
             </div>
 
@@ -192,8 +198,9 @@ const DatasetsDetails = () => {
                   <div className="w-full">
                     <p className="customColor2 text-sm">Desarrollado por</p>
                     <p className="font-semibold customColor1">
-                      {toTitleCase(dataset?.organization?.title) ||
-                        'Organización desconocida'}
+                      {dataset?.organization && dataset.organization.title
+                        ? toTitleCase(dataset.organization.title)
+                        : 'Organización desconocida'}
                     </p>
                   </div>
                 </div>
@@ -255,7 +262,7 @@ const DatasetsDetails = () => {
           </section>
         </section>
       </div>
-      {showViewer && currentDoc && (
+      {/* {showViewer && currentDoc && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-4xl h-[90vh] p-4 relative flex flex-col">
             <button
@@ -284,7 +291,7 @@ const DatasetsDetails = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   )
 }

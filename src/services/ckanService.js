@@ -51,6 +51,8 @@ export const getDatasetById = async (id) => {
   const res = await fetch(`${BASE_URL}/package_show?id=${id}`)
   const data = await res.json()
   if (!data.success) throw new Error('No se pudo cargar el dataset.')
+  console.log(data)
+
   return data.result
 }
 
