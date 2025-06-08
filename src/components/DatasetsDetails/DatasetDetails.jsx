@@ -7,7 +7,6 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
-import { getAllDatasets } from '@/services/ckanService'
 import getColorByFormat from '@/utils/getColorsByFormat'
 import { toTitleCase } from '@/utils/toTitleCase'
 import { useQuery } from '@tanstack/react-query'
@@ -62,16 +61,17 @@ const DatasetsDetails = () => {
   const { id } = useParams()
 
   const {
-    data: allDatasets,
+    data: dataset,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['datasets'],
-    queryFn: getAllDatasets,
+    queryKey: ['dataset', id],
+    queryFn: () => getDatasetById(id),
   })
-  const dataset = Array.isArray(allDatasets)
-    ? allDatasets.find((d) => d.id === id)
-    : null
+
+  // const dataset = Array.isArray(allDatasets)
+  //   ? allDatasets.find((d) => d.id === id)
+  //   : null
 
   const navigate = useNavigate()
   const handleVerRecurso = (res) => {

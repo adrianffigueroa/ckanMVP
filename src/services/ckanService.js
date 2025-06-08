@@ -47,6 +47,13 @@ export const getAllDatasets = async () => {
   }
 }
 
+export const getDatasetById = async (id) => {
+  const res = await fetch(`${BASE_URL}/package_show?id=${id}`)
+  const data = await res.json()
+  if (!data.success) throw new Error('No se pudo cargar el dataset.')
+  return data.result
+}
+
 export const getOrganizationsWithInfo = async () => {
   const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
   const data = await res.json()
