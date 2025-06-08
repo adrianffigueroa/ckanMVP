@@ -1,5 +1,5 @@
-const BASE_URL = 'https://ckan-data-project.duckdns.org/api/3/action'
-const CKAN_ADMIN_USERNAME = 'admin'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const CKAN_ADMIN_USERNAME = import.meta.env.VITE_CKAN_ADMIN_USERNAME
 
 export const getThemeFromUserAbout = async () => {
   try {
