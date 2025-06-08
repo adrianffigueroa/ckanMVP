@@ -8,11 +8,12 @@ export const getThemeFromUserAbout = async () => {
 
     const about = JSON.parse(data.result.about)
 
-    // Si está en formato con colors y themeVersion, usarlo
-    const colores = about.colors ?? about
-    const version = about.themeVersion ?? '1'
+    // En tu JSON: version es campo plano, el resto son colores
+    const version = about.version ?? '1'
 
-    // Validamos que todos los campos existan
+    // Filtrar solo las claves de color (todo menos version)
+    const { version: _, ...coloresPlano } = about
+
     const defaultColors = {
       primary: 'rgb(74, 58, 255)',
       decorator: 'rgb(243, 243, 255)',
@@ -28,13 +29,12 @@ export const getThemeFromUserAbout = async () => {
     }
 
     // Merge: si faltan keys, usar defaults
-    const mergedColors = { ...defaultColors, ...colores }
+    const mergedColors = { ...defaultColors, ...coloresPlano }
 
     return { colores: mergedColors, version }
   } catch (err) {
     console.warn('❌ No se pudo obtener o parsear el JSON de colores:', err)
 
-    // Valores por defecto si falla
     return {
       colores: {
         primary: 'rgb(74, 58, 255)',
