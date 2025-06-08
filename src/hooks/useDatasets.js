@@ -5,6 +5,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL
 export const useDatasets = () => {
   const query = useQuery({
     queryKey: ['datasets'],
+
     queryFn: async () => {
       const res = await fetch(`${BASE_URL}/package_search`)
       if (!res.ok) throw new Error('Error al obtener datasets')
