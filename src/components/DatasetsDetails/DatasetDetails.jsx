@@ -97,6 +97,8 @@ const DatasetsDetails = () => {
 
   return (
     <>
+      {isError && <p>Hubo un error</p>}
+      {isLoading && <p>Cargando...</p>}
       <div className="px-20 mb-8">
         <section>
           <div className="flex flex-col mt-30">
