@@ -29,7 +29,9 @@ import {
   Users,
 } from 'lucide-react'
 import { useState } from 'react'
+import DocViewer, { DocViewerRenderers } from 'react-doc-viewer'
 import { useNavigate, useParams } from 'react-router-dom'
+
 const getGroupIcon = (groupName) => {
   const icons = {
     ciencia: Atom,
@@ -95,12 +97,7 @@ const DatasetsDetails = () => {
   const handleDownload = (res) => {
     window.open(res.url, '_blank')
   }
-  console.log(dataset)
-  console.log('dataset', dataset)
-  console.log('isLoading', isLoading)
-  console.log('isError', isError)
-  console.log('error', error)
-  console.log('isFetching', isFetching)
+
   if (isError) return <p>Hubo un error</p>
 
   if (isLoading) return <p>Cargando...</p>
@@ -142,8 +139,6 @@ const DatasetsDetails = () => {
           <section className="mt-10 flex flex-col md:flex-row gap-10">
             {/* Columna izquierda */}
             <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
-              <p className="customColor2">{dataset?.notes}</p>
-
               <div className="flex flex-col gap-2 h-1/4">
                 {Array.isArray(dataset?.resources) &&
                 dataset.resources.length > 0 ? (
@@ -252,6 +247,16 @@ const DatasetsDetails = () => {
                   </div>
                 </li>
                 <li className="grid grid-cols-2 items-start">
+                  <div className="customColor1 font-semibold">
+                    Actualización
+                  </div>
+                  <div className="customColor2">
+                    {dataset?.extras[0].value
+                      ? dataset?.extras[0].value
+                      : 'No disponible'}
+                  </div>
+                </li>
+                <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold mt-1">
                     Etiquetas
                   </div>
@@ -272,7 +277,7 @@ const DatasetsDetails = () => {
           </section>
         </section>
       </div>
-      {/* {showViewer && currentDoc && (
+      {showViewer && currentDoc && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-4xl h-[90vh] p-4 relative flex flex-col">
             <button
@@ -285,23 +290,21 @@ const DatasetsDetails = () => {
               Previsualizador de Word
             </h2>
             <div className="flex-1 overflow-hidden">
-              {currentDoc?.[0]?.uri ? (
-                <iframe
-                  src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                    currentDoc[0].uri
-                  )}&embedded=true`}
-                  title="Doc Viewer"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 'none' }}
-                />
-              ) : (
-                <p className="text-red-500">No se pudo cargar el documento.</p>
-              )}
+              <DocViewer
+                documents={currentDoc}
+                pluginRenderers={DocViewerRenderers}
+                style={{ width: '100%', height: '100%' }}
+                config={{
+                  header: {
+                    disableHeader: true,
+                    disableFileName: true,
+                  },
+                }}
+              />
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </>
   )
 }
