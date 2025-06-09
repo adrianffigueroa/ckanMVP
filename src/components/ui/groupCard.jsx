@@ -56,7 +56,7 @@ const GroupCard = ({ title, datasets, group }) => {
               {title}
             </h3>
 
-            <p className="text-sm text-muted-foreground leading-snug">
+            <p className="text-sm text-muted-foreground leading-snug text-left">
               {group.description}
             </p>
           </div>
