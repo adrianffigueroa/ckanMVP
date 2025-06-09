@@ -431,11 +431,9 @@ const ResourceViewer = () => {
       )}
       {/* renderCharts con Card adaptable */}
       <div className="w-full">
-        {chartType === 'bar' && (
-          <Card className="p-4 min-h-[400px] sm:h-[600px] overflow-auto">
-            {renderCharts()}
-          </Card>
-        )}
+        <Card className="p-4 min-h-[400px] sm:h-[600px] overflow-auto">
+          {renderCharts()}
+        </Card>
       </div>
     </div>
   )
