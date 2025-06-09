@@ -67,7 +67,7 @@ const Navbar = () => {
           <Link
             to="/datasets"
             className={`text-base mx-6 hover:text-primary ${
-              location.pathname.startsWith('/datasets')
+              location.pathname.startsWith('/datasets' || '/resourceView')
                 ? 'text-primary font-bold text-shadow custom-md'
                 : 'font-normal'
             }`}
