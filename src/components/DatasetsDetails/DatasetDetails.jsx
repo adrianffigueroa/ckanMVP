@@ -93,7 +93,7 @@ const DatasetsDetails = () => {
       window.open(res.url, '_blank')
     }
   }
-  const ultimaActualizacion = resources.length
+  const ultimaActualizacion = resources?.length
     ? formatDate(
         new Date(
           Math.max(
@@ -152,8 +152,8 @@ const DatasetsDetails = () => {
             <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
-                dataset.resources.length > 0 ? (
-                  dataset?.resources.map((res, index) => (
+                dataset?.resources?.length > 0 ? (
+                  dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
                       className="flex flex-col sm:flex-row gap-4 border-b pb-4"
