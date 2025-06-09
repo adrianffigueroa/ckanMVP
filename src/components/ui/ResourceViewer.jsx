@@ -321,19 +321,19 @@ const ResourceViewer = () => {
   if (isError) return <p className="text-red-600">{error.message}</p>
 
   return (
-    <div className="mt-20 mx-40">
+    <div className="mt-20 mx-auto px-4 sm:px-8 md:px-20 lg:px-40">
       <h2 className="text-2xl font-bold text-primary mb-8">
         {formatResourceName(resource.name)}
       </h2>
 
       {renderTable()}
       {columns.length > 0 && (
-        <div className="flex flex-wrap gap-4 mb-4">
+        <div className="flex flex-wrap justify-center sm:justify-start gap-4 mb-4">
           {/* Tipo de gráfico */}
-          <div className="flex flex-col my-4">
+          <div className="flex flex-col w-full sm:w-auto my-4">
             <label className="text-sm font-medium mb-1">Tipo de gráfico:</label>
             <Select value={chartType} onValueChange={setChartType}>
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder="Seleccionar tipo de gráfico" />
               </SelectTrigger>
               <SelectContent>
@@ -345,12 +345,12 @@ const ResourceViewer = () => {
           </div>
 
           {/* Columna X / Categoría */}
-          <div className="flex flex-col my-4">
+          <div className="flex flex-col w-full sm:w-auto my-4">
             <label className="text-sm font-medium mb-1">
               Columna X / Categoría:
             </label>
             <Select value={xAxis} onValueChange={setXAxis}>
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder="Seleccionar columna" />
               </SelectTrigger>
               <SelectContent>
@@ -364,12 +364,12 @@ const ResourceViewer = () => {
           </div>
 
           {/* Columna Y / Valor */}
-          <div className="flex flex-col my-4">
+          <div className="flex flex-col w-full sm:w-auto my-4">
             <label className="text-sm font-medium mb-1">
               Columna Y / Valor:
             </label>
             <Select value={yAxis} onValueChange={setYAxis} disabled={!xAxis}>
-              <SelectTrigger className="w-[200px]" disabled={!xAxis}>
+              <SelectTrigger className="w-full sm:w-[200px]" disabled={!xAxis}>
                 <SelectValue
                   placeholder={
                     !xAxis
@@ -394,7 +394,7 @@ const ResourceViewer = () => {
             </Select>
           </div>
           {/* Función de agregación */}
-          <div className="flex flex-col my-4">
+          <div className="flex flex-col w-full sm:w-auto my-4">
             <label className="text-sm font-medium mb-1">
               Función de agregación:
             </label>
@@ -404,7 +404,7 @@ const ResourceViewer = () => {
               disabled={!yAxis || !isNumericColumn(yAxis)}
             >
               <SelectTrigger
-                className="w-[200px]"
+                className="w-full sm:w-[200px]"
                 disabled={!yAxis || !isNumericColumn(yAxis)}
               >
                 <SelectValue
@@ -429,7 +429,14 @@ const ResourceViewer = () => {
           </div>
         </div>
       )}
-      {renderCharts()}
+      {/* renderCharts con Card adaptable */}
+      <div className="w-full">
+        {chartType === 'bar' && (
+          <Card className="p-4 min-h-[300px] sm:h-[500px] overflow-auto">
+            {renderCharts()}
+          </Card>
+        )}
+      </div>
     </div>
   )
 }
