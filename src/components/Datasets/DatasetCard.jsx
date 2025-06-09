@@ -25,8 +25,16 @@ const DatasetCard = ({ dataset }) => {
     ),
   ]
 
-  const ultimaActualizacion = resources[0]?.last_modified
-    ? formatDate(resources[0].last_modified)
+  const ultimaActualizacion = resources.length
+    ? formatDate(
+        new Date(
+          Math.max(
+            ...resources
+              .filter((r) => r.last_modified)
+              .map((r) => new Date(r.last_modified).getTime())
+          )
+        )
+      )
     : 'No disponible'
 
   return (

@@ -93,6 +93,17 @@ const DatasetsDetails = () => {
       window.open(res.url, '_blank')
     }
   }
+  const ultimaActualizacion = resources.length
+    ? formatDate(
+        new Date(
+          Math.max(
+            ...resources
+              .filter((r) => r.last_modified)
+              .map((r) => new Date(r.last_modified).getTime())
+          )
+        )
+      )
+    : 'No disponible'
 
   const handleDownload = (res) => {
     window.open(res.url, '_blank')
@@ -139,7 +150,7 @@ const DatasetsDetails = () => {
           <section className="mt-10 flex flex-col md:flex-row gap-10">
             {/* Columna izquierda */}
             <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
-              <div className="flex flex-col gap-2 h-1/4">
+              <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset.resources.length > 0 ? (
                   dataset?.resources.map((res, index) => (
@@ -227,10 +238,8 @@ const DatasetsDetails = () => {
                     Última actualización
                   </div>
                   <div className="customColor2">
-                    {dataset?.resources?.[0]?.last_modified
-                      ? new Date(
-                          dataset.resources[0].last_modified
-                        ).toLocaleDateString('es-AR')
+                    {dataset?.resources?.[0]?.metadata_modified
+                      ? ultimaActualizacion
                       : 'No disponible'}
                   </div>
                 </li>
@@ -252,7 +261,7 @@ const DatasetsDetails = () => {
                   </div>
                   <div className="customColor2">
                     {dataset?.extras[0].value
-                      ? dataset?.extras[0].value
+                      ? toTitleCase(dataset?.extras[0].value)
                       : 'No disponible'}
                   </div>
                 </li>
@@ -278,7 +287,7 @@ const DatasetsDetails = () => {
         </section>
       </div>
       {showViewer && currentDoc && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center mb-10">
           <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-4xl h-[90vh] p-4 relative flex flex-col">
             <button
               onClick={() => setShowViewer(false)}
