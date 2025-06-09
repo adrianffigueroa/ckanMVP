@@ -93,17 +93,6 @@ const DatasetsDetails = () => {
       window.open(res.url, '_blank')
     }
   }
-  const ultimaActualizacion = resources?.length
-    ? formatDate(
-        new Date(
-          Math.max(
-            ...resources
-              .filter((r) => r.last_modified)
-              .map((r) => new Date(r.last_modified).getTime())
-          )
-        )
-      )
-    : 'No disponible'
 
   const handleDownload = (res) => {
     window.open(res.url, '_blank')
@@ -238,8 +227,16 @@ const DatasetsDetails = () => {
                     Última actualización
                   </div>
                   <div className="customColor2">
-                    {dataset?.resources?.[0]?.metadata_modified
-                      ? ultimaActualizacion
+                    {dataset?.metadata_modified
+                      ? new Date(dataset.metadata_modified).toLocaleDateString(
+                          'es-AR',
+                          {
+                            timeZone: 'America/Argentina/Buenos_Aires',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          }
+                        )
                       : 'No disponible'}
                   </div>
                 </li>
