@@ -229,13 +229,7 @@ const DatasetsDetails = () => {
                   <div className="customColor2">
                     {dataset?.metadata_modified
                       ? new Date(dataset.metadata_modified).toLocaleDateString(
-                          'es-AR',
-                          {
-                            timeZone: 'America/Argentina/Buenos_Aires',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          }
+                          'es-AR'
                         )
                       : 'No disponible'}
                   </div>
