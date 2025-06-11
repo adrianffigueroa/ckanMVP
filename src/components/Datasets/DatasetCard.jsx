@@ -39,7 +39,7 @@ const DatasetCard = ({ dataset }) => {
 
   return (
     <Link to={`/datasetsDetails/${dataset.id}`}>
-      <Card className="p-2 rounded-md shadow-[0_20px_80px_rgba(74,58,255,0.15)] bg-white">
+      <Card className="p-2 rounded-md shadow-theme-light bg-white">
         <CardHeader>
           <CardTitle className="text-lg font-semibold customColor1">
             {title}

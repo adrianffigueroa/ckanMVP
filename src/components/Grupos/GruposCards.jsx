@@ -46,7 +46,7 @@ const GruposCards = ({ group }) => {
 
   return (
     <div>
-      <Card className="h-60 w-full flex flex-col justify-between p-4 rounded-md shadow-[0_20px_80px_rgba(74,58,255,0.08)] bg-white">
+      <Card className="h-60 w-full flex flex-col justify-between p-4 rounded-md shadow-theme-light bg-white">
         <CardHeader className="p-0">
           <div className="flex items-center gap-3">
             {getGroupIcon(group?.name)}
