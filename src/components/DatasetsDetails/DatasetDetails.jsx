@@ -201,16 +201,16 @@ const DatasetsDetails = () => {
                       </div>
 
                       {/* Derecha: botones */}
-                      <div className="flex flex-row gap-2 flex-shrink-0 sm:flex-col w-full sm:items-stretch">
+                      <div className="flex flex-row gap-2 flex-shrink-0 max-[450px]:flex-col w-full max-[450px]:items-stretch">
                         <Button
                           onClick={() => handleDownload(res)}
-                          className="w-[110px] h-9  text-gray-600 text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                          className="w-[110px] h-9  text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
                         >
                           Descargar <Download size={14} />
                         </Button>
                         <Button
                           onClick={() => handleVerRecurso(res)}
-                          className="w-[120px] h-9  text-gray-600 text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                          className="w-[120px] h-9  text-gray-600 text-sm flex items-center justify-center gap-1  hover:cursor-pointer"
                         >
                           Ver Recurso <Eye size={14} />
                         </Button>
