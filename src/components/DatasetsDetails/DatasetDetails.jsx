@@ -181,7 +181,7 @@ const DatasetsDetails = () => {
                       {/* Izquierda: formato + info */}
                       <div className="flex gap-3 flex-grow">
                         <Badge
-                          className={`${getColorByFormat(res.format)} text-white text-xs px-3 py-1 mt-1`}
+                          className={`${getColorByFormat(res.format)} text-white text-xs w-14 h-8 flex items-center justify-center`}
                         >
                           {res.format?.toUpperCase()}
                         </Badge>
@@ -200,16 +200,16 @@ const DatasetsDetails = () => {
                         </div>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-2">
+                      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 w-full">
                         <Button
                           onClick={() => handleDownload(res)}
-                          className="w-full sm:w-24 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                          className="min-w-[96px] h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
                         >
                           Descargar <Download size={14} />
                         </Button>
                         <Button
                           onClick={() => handleVerRecurso(res)}
-                          className="w-full sm:w-28 h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                          className="min-w-[96px] h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
                         >
                           Ver Recurso <Eye size={14} />
                         </Button>
