@@ -201,7 +201,7 @@ const DatasetsDetails = () => {
                       </div>
 
                       {/* Derecha: botones */}
-                      <div className="flex flex-row gap-2 flex-shrink-0 lg:flex-col w-full md:w-auto md:ml-auto lg:items-stretch">
+                      <div className="flex flex-row gap-2 flex-shrink-0 md:flex-col w-full md:w-auto md:ml-auto md:items-stretch">
                         <Button
                           onClick={() => handleDownload(res)}
                           className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
