@@ -167,9 +167,9 @@ const DatasetsDetails = () => {
             </p>
           </div>
 
-          <section className="mt-10 flex flex-col md:flex-row gap-10 md:gap-16 md:items-start md:justify-between">
+          <section className="mt-10 flex flex-col md:flex-row md:gap-12 md:items-start md:justify-between">
             {/* Columna izquierda */}
-            <div className="w-full md:flex-1 flex flex-col gap-4 rounded-xl p-0">
+            <div className="w-full md:w-[65%] flex flex-col gap-4 rounded-xl p-0">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset?.resources?.length > 0 ? (
@@ -228,7 +228,7 @@ const DatasetsDetails = () => {
             </div>
 
             {/* Columna derecha */}
-            <div className="w-full md:w-[350px] bg-white rounded-xl p-5 shadow border border-gray-200 flex-shrink-0">
+            <div className="w-full md:w-[35%] bg-white rounded-xl p-5 shadow border border-gray-200 flex-shrink-0">
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4 items-center">
                   <div className="flex items-center">
