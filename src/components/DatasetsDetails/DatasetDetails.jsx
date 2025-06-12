@@ -176,31 +176,33 @@ const DatasetsDetails = () => {
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-x-4 gap-y-2 border-b pb-4 w-full"
+                      className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center gap-x-6 gap-y-2 border-b pb-4 w-full"
                     >
-                      {/* Izquierda: formato + info */}
-                      <div className="flex w-full items-start lg:items-center min-w-0">
+                      {/* Badge */}
+                      <div className="flex items-center">
                         <Badge
-                          className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold self-start`}
+                          className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold`}
                         >
                           {res.format?.toUpperCase()}
                         </Badge>
-                        <div className="flex flex-col overflow-hidden min-w-0">
-                          <a
-                            href={res.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary font-medium text-sm hover:underline truncate"
-                          >
-                            {res.name}
-                          </a>
-                          <p className="text-sm customColor2 break-words">
-                            {res.description || 'Sin descripción'}
-                          </p>
-                        </div>
                       </div>
 
-                      {/* Derecha: botones */}
+                      {/* Texto */}
+                      <div className="flex flex-col min-w-0">
+                        <a
+                          href={res.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary font-medium text-sm hover:underline truncate"
+                        >
+                          {res.name}
+                        </a>
+                        <p className="text-sm customColor2 break-words">
+                          {res.description || 'Sin descripción'}
+                        </p>
+                      </div>
+
+                      {/* Botones */}
                       <div className="flex flex-row gap-1 flex-shrink-0 md:ml-auto">
                         <Button
                           onClick={() => handleDownload(res)}
@@ -228,7 +230,7 @@ const DatasetsDetails = () => {
             </div>
 
             {/* Columna derecha */}
-            <div className="w-full md:w-1/3 bg-white rounded-xl p-5 shadow border border-gray-200">
+            <div className="w-full md:w-[400px] bg-white rounded-xl p-5 shadow border border-gray-200">
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4">
                   <div className="flex items-center">
