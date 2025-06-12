@@ -224,7 +224,7 @@
   scrollbar-width: none; /* Firefox */
 }
 
-@media (min-width: 900px) {
+@media (min-width: 800px) {
   .custom-md\:block {
     display: block;
   }
