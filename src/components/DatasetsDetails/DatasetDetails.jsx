@@ -167,53 +167,51 @@ const DatasetsDetails = () => {
             </p>
           </div>
 
-          <section className="mt-10 flex flex-col md:flex-row md:flex-nowrap md:justify-between gap-10">
+          <section className="mt-10 flex flex-col md:flex-row gap-10 md:gap-16 md:items-start md:justify-between">
             {/* Columna izquierda */}
-            <div className="w-full flex flex-col items-start gap-4 rounded-xl pt-5 pb-0">
+            <div className="w-full md:flex-1 flex flex-col gap-4 rounded-xl p-0">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset?.resources?.length > 0 ? (
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-4 border-b pb-4 items-center"
+                      className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b pb-4"
                     >
-                      {/* Badge */}
-                      <div className="flex items-center">
+                      {/* Izquierda: formato + info */}
+                      <div className="flex items-center gap-3 min-w-0 flex-grow">
                         <Badge
                           className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold`}
                         >
                           {res.format?.toUpperCase()}
                         </Badge>
+                        <div className="flex flex-col overflow-hidden min-w-0">
+                          <a
+                            href={res.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary font-medium text-sm hover:underline truncate"
+                          >
+                            {res.name}
+                          </a>
+                          <p className="text-sm customColor2 break-words">
+                            {res.description || 'Sin descripción'}
+                          </p>
+                        </div>
                       </div>
 
-                      {/* Texto */}
-                      <div className="flex flex-col min-w-0">
-                        <a
-                          href={res.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary font-medium text-sm hover:underline truncate"
-                        >
-                          {res.name}
-                        </a>
-                        <p className="text-sm customColor2 break-words">
-                          {res.description || 'Sin descripción'}
-                        </p>
-                      </div>
-
-                      {/* Botones */}
-                      <div className="flex flex-row gap-1 flex-shrink-0 md:ml-auto">
+                      {/* Derecha: botones */}
+                      <div className="flex flex-row gap-1 flex-shrink-0 md:ml-4 md:flex-none">
                         <Button
                           onClick={() => handleDownload(res)}
-                          className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-start gap-1 hover:cursor-pointer"
+                          className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
                           variant="ghost"
                         >
                           Descargar <Download size={14} />
                         </Button>
                         <Button
                           onClick={() => handleVerRecurso(res)}
-                          className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-start gap-1 hover:cursor-pointer"
+                          className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
                           variant="ghost"
                         >
                           Ver Recurso <Eye size={14} />
@@ -230,9 +228,9 @@ const DatasetsDetails = () => {
             </div>
 
             {/* Columna derecha */}
-            <div className="w-full md:w-[400px] bg-white rounded-xl p-5 shadow border border-gray-200">
+            <div className="w-full md:w-[350px] bg-white rounded-xl p-5 shadow border border-gray-200 flex-shrink-0">
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
-                <div className="flex gap-4">
+                <div className="flex gap-4 items-center">
                   <div className="flex items-center">
                     {getGroupIcon(dataset?.groups[0].name)}
                   </div>
@@ -259,7 +257,11 @@ const DatasetsDetails = () => {
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">Estado</div>
                   <div
-                    className={`${dataset?.state === 'active' ? 'text-green-600' : 'text-red-600'} font-semibold`}
+                    className={`${
+                      dataset?.state === 'active'
+                        ? 'text-green-600'
+                        : 'text-red-600'
+                    } font-semibold`}
                   >
                     {dataset?.state === 'active' ? 'Activo' : 'Inactivo'}
                   </div>
