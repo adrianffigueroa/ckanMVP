@@ -5,7 +5,6 @@ export const applyColors = (colors) => {
     if (value) root.style.setProperty(`--${key}`, value)
   })
 
-  // Sombras si el primary es RGB
   const primary = colors.primary
   const match = primary?.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
   if (match) {

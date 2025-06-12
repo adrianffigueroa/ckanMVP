@@ -23,7 +23,6 @@ const Navbar = () => {
 
           let image = data.result?.image_url
           if (image) {
-            // Si la imagen no incluye URL absoluta, construimos una
             if (!image.startsWith('http')) {
               image = `${BASE_URL.replace('/api/3/action', '')}/uploads/user/${image}`
             }
@@ -35,7 +34,7 @@ const Navbar = () => {
       }
 
       fetchLogo()
-    }, 300) // ⏱️ Espera 300 ms
+    }, 300)
 
     return () => clearTimeout(timer)
   }, [])
@@ -52,7 +51,7 @@ const Navbar = () => {
         <div className="hidden custom-md:flex">
           <Link to="/" className="flex items-center gap-2">
             {logoURL ? (
-              <img src={logoURL} alt="Logo" className="w-16 h-16 rounded-2xl" />
+              <img src={logoURL} alt="Logo" className="w-18 h-12 rounded-2xl" />
             ) : (
               <span className="text-xl font-bold text-primary">Logo</span>
             )}

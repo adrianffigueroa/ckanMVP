@@ -1,4 +1,3 @@
-// components/Datasets/SkeletonDatasetCard.jsx
 export default function SkeletonDatasetCard() {
   return (
     <div className="animate-pulse rounded-md bg-white shadow-[0_20px_80px_rgba(74,58,255,0.15)] p-4 space-y-4">

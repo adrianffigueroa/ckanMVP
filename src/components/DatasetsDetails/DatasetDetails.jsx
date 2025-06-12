@@ -92,7 +92,6 @@ const DatasetsDetails = () => {
   const [showViewer, setShowViewer] = useState(false)
   const [currentDoc, setCurrentDoc] = useState(null)
   const { id } = useParams()
-  console.log(id)
 
   const {
     data: dataset,
@@ -103,22 +102,19 @@ const DatasetsDetails = () => {
   } = useQuery({
     queryKey: ['dataset', id],
     queryFn: () => {
-      console.log('🔥 Ejecutando getDatasetById con id:', id)
       return getDatasetById(id)
     },
-    enabled: !!id, // muy importante, para que no se ejecute con id undefined
+    enabled: !!id,
   })
 
   const navigate = useNavigate()
   const handleVerRecurso = (res) => {
-    console.log(res)
-
     const format = res.format?.toLowerCase()
 
     if (['csv', 'xls', 'xlsx'].includes(format)) {
       navigate(`/resourceView/${res.id}`)
     } else if (['doc', 'docx'].includes(format)) {
-      setCurrentDoc([{ uri: res.url }]) // Ya no necesitás `fileType`
+      setCurrentDoc([{ uri: res.url }])
       setShowViewer(true)
     } else {
       window.open(res.url, '_blank')

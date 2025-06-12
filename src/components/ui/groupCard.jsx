@@ -1,4 +1,3 @@
-//import cardIcon from '@/assets/cardIcon.png'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Atom,
@@ -40,9 +39,6 @@ const getGroupIcon = (groupName) => {
   )
 }
 const GroupCard = ({ title, datasets, group }) => {
-  console.log(title, datasets)
-  console.log(group)
-
   return (
     <div className="relative w-60 h-64 mx-auto">
       {/* Card with enhanced blurred border effect */}

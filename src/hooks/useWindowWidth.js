@@ -10,7 +10,6 @@ export function useWindowWidth() {
 
     window.addEventListener('resize', handleResize)
 
-    // Limpieza del event listener al desmontar
     return () => {
       window.removeEventListener('resize', handleResize)
     }

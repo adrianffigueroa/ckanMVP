@@ -1,22 +1,21 @@
-// src/hooks/useCkanSearch.js
-import { useState, useEffect } from "react";
-import { searchDatasets } from "@/services/ckan";
+import { searchDatasets } from '@/services/ckan'
+import { useEffect, useState } from 'react'
 
 export function useCkanSearch(query) {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     searchDatasets(query)
       .then(setData)
       .catch((err) => {
-        console.error("Error buscando datasets:", err);
-        setError(err);
+        console.error('Error buscando datasets:', err)
+        setError(err)
       })
-      .finally(() => setLoading(false));
-  }, [query]);
+      .finally(() => setLoading(false))
+  }, [query])
 
-  return { data, loading, error };
+  return { data, loading, error }
 }

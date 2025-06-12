@@ -11,17 +11,13 @@ export const useDatasets = () => {
       const data = await res.json()
       if (!Array.isArray(data.result?.results))
         throw new Error('Formato inválido')
-
-      // Guardamos en localStorage si salió bien
       localStorage.setItem('datasetsCache', JSON.stringify(data.result.results))
       return data.result.results
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: 1000 * 60 * 5,
     retry: 1,
     refetchOnWindowFocus: false,
-    onError: () => {
-      // No hacemos nada acá, el fallback lo maneja abajo
-    },
+    onError: () => {},
   })
 
   const fallback = () => {

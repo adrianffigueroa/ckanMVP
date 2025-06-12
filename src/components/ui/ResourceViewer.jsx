@@ -37,7 +37,7 @@ const ResourceViewer = () => {
   const [chartType, setChartType] = useState('bar')
   const [xAxis, setXAxis] = useState('')
   const [yAxis, setYAxis] = useState('')
-  const [aggregation, setAggregation] = useState('') // 'sum' | 'avg' | 'count'
+  const [aggregation, setAggregation] = useState('')
 
   const { id } = useParams()
 

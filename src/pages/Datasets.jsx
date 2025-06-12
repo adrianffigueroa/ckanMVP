@@ -138,19 +138,19 @@ function Datasets() {
       const dateB = new Date(b.metadata_modified)
 
       if (sortOption === 'new') {
-        return dateB - dateA // más reciente primero
+        return dateB - dateA
       }
       if (sortOption === 'old') {
-        return dateA - dateB // más antiguo primero
+        return dateA - dateB
       }
       if (sortOption === 'relevant' && searchTerm.trim()) {
         const term = searchTerm.toLowerCase()
         const scoreA = a.title.toLowerCase().includes(term) ? 0 : 1
         const scoreB = b.title.toLowerCase().includes(term) ? 0 : 1
-        return scoreA - scoreB // los que contienen el término primero
+        return scoreA - scoreB
       }
 
-      return 0 // sin cambios si no aplica
+      return 0
     })
 
   useEffect(() => {

@@ -7,7 +7,6 @@ export default function CustomCarousel({ items }) {
   const [scrollLeft, setScrollLeft] = useState(0)
   const [shouldScroll, setShouldScroll] = useState(false)
 
-  // Calcular si debe moverse solo
   const evaluateShouldScroll = () => {
     const width = window.innerWidth
     if (width >= 768 && items.length > 4) return true

@@ -38,8 +38,6 @@ export const getAllDatasets = async () => {
   try {
     const response = await fetch(`${BASE_URL}/package_search?q=&rows=1000`)
     const data = await response.json()
-    console.log(data)
-
     return Array.isArray(data.result?.results) ? data.result.results : []
   } catch (error) {
     console.error('Error fetching datasets:', error)
@@ -51,15 +49,13 @@ export const getDatasetById = async (id) => {
   const res = await fetch(`${BASE_URL}/package_show?id=${id}`)
   const data = await res.json()
   if (!data.success) throw new Error('No se pudo cargar el dataset.')
-  console.log(data)
-
   return data.result
 }
 
 export const getOrganizationsWithInfo = async () => {
   const res = await fetch(`${BASE_URL}/organization_list?all_fields=true`)
   const data = await res.json()
-  return data.result // contiene name, title, description, package_count, etc.
+  return data.result
 }
 
 export const getAllGroups = async () => {

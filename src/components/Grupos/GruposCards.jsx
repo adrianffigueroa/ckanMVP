@@ -42,8 +42,6 @@ const getGroupIcon = (groupName) => {
   )
 }
 const GruposCards = ({ group }) => {
-  console.log(group)
-
   return (
     <div>
       <Card className="h-60 w-full flex flex-col justify-between p-4 rounded-md shadow-theme-light bg-white">

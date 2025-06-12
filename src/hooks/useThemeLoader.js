@@ -14,15 +14,11 @@ export const useThemeLoader = () => {
         const shouldUpdate = cachedVersion !== version
 
         if (cachedTheme && !shouldUpdate) {
-          // Usamos el theme cacheado si la version es igual
           applyColors(JSON.parse(cachedTheme))
-          console.log('🎨 Usando theme cacheado, versión:', version)
         } else {
-          // Aplicamos el nuevo y actualizamos el cache
           applyColors(colores)
           localStorage.setItem('themeConfig', JSON.stringify(colores))
           localStorage.setItem('themeVersion', version)
-          console.log('🎨 Aplicando theme nuevo, versión:', version)
         }
       })
       .catch((err) => {

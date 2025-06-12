@@ -1,11 +1,11 @@
 function formatResourceName(rawName) {
   return rawName
-    .replace(/\.[^/.]+$/, '') // quitar extensión
-    .replace(/[_-]+/g, ' ') // reemplazar _ o - por espacio
-    .replace(/\s+/g, ' ') // quitar espacios extra
+    .replace(/\.[^/.]+$/, '')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase()
-    .replace(/^\w|\s\w/g, (m) => m.toUpperCase()) // capitalizar
+    .replace(/^\w|\s\w/g, (m) => m.toUpperCase())
 }
 
 export default formatResourceName

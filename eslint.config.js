@@ -39,8 +39,8 @@ export default defineConfig([
       'react/jsx-filename-extension': [1, { extensions: ['.jsx'] }],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      'prettier/prettier': 'warn', // <-- activa prettier como regla
+      'prettier/prettier': 'warn',
     },
   },
-  configPrettier, // <-- desactiva reglas de eslint que chocan con Prettier
+  configPrettier,
 ])
