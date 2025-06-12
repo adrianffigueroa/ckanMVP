@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div className="px-20">
+    <div className="px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
       <div className="relative">
         {/* Fondo decorativo visible siempre (para testear) */}
         <div className="absolute right-0 top-0 w-[50%] h-full z-0 mt-16">

@@ -249,7 +249,7 @@ const DatasetsDetails = () => {
               </div>
               <ul className="text-sm space-y-6 mt-4">
                 <li className="flex items-start">
-                  <p className="text-primary">Información</p>
+                  <p className="text-primary font-semibold">Información</p>
                 </li>
                 <li className="flex items-start">
                   <div className="customColor1 font-semibold w-[180px]">
@@ -311,7 +311,7 @@ const DatasetsDetails = () => {
                   <div className="customColor1 font-semibold w-[180px] mt-1">
                     Etiquetas
                   </div>
-                  <div className="flex flex-wrap gap-2 pl-4">
+                  <div className="flex flex-wrap gap-1 pl-2">
                     {dataset?.tags?.map((tag) => (
                       <Badge
                         key={tag.name}

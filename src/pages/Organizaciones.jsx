@@ -30,7 +30,7 @@ const Organizaciones = () => {
   console.log(filteredorganizations)
 
   return (
-    <div className="mt-40 px-20 flex flex-col mb-22">
+    <div className="px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 mb-22 flex flex-col">
       <div className="flex flex-col max-w-screen-xl gap-1">
         <h2 className="text-3xl font-semibold text-primary">
           Buscador de Organizaciones

@@ -321,7 +321,7 @@ const ResourceViewer = () => {
   if (isError) return <p className="text-red-600">{error.message}</p>
 
   return (
-    <div className="mt-20 mx-auto px-4 sm:px-8 md:px-20 lg:px-40">
+    <div className="px-4 mt-20 mx-auto sm:px-8 md:px-12 lg:px-16 xl:px-20">
       <h2 className="text-2xl font-bold text-primary mb-8">
         {formatResourceName(resource.name)}
       </h2>

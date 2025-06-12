@@ -260,7 +260,7 @@ function Datasets() {
 
   const userChangedSort = useRef(false)
   return (
-    <div className="px-20">
+    <div className="px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
       <div className="flex flex-col mt-30 ">
         <div className="flex flex-col md:flex-row items-start justify-between">
           <Breadcrumb className="mb-4">
