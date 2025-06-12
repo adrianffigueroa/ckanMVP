@@ -229,7 +229,7 @@ const DatasetsDetails = () => {
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4">
                   <div className="flex items-center">
-                    {getGroupIcon(dataset?.groups[0].name, 'columna')}
+                    {getGroupIcon(dataset?.groups[0].name)}
                   </div>
                   <div className="w-full">
                     <p className="customColor2 text-sm">Desarrollado por</p>
@@ -248,7 +248,7 @@ const DatasetsDetails = () => {
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">Grupo</div>
                   <div className="customColor2 bg-transparent">
-                    {getGroupIcon(dataset?.groups[0].name)}
+                    {getGroupIcon(dataset?.groups[0].name, 'columna')}
                   </div>
                 </li>
                 <li className="grid grid-cols-2 items-start">
