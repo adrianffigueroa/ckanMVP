@@ -1,6 +1,5 @@
 import App from '@/App'
 import DatasetsDetails from '@/components/DatasetsDetails/DatasetDetails'
-import Login from '@/components/Login/Login'
 import About from '@/pages/About'
 import Datasets from '@/pages/Datasets'
 import Grupos from '@/pages/Grupos'
@@ -21,7 +20,6 @@ function AppRouter() {
           {/* <Route path="datasetsDetailsView/:id" element={<ChartViewer />} /> */}
           <Route path="organizaciones" element={<Organizaciones />} />
           <Route path="grupos" element={<Grupos />} />
-          <Route path="login" element={<Login />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<Home />} />
         </Route>
