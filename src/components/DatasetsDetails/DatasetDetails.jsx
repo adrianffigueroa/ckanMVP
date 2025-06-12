@@ -136,7 +136,7 @@ const DatasetsDetails = () => {
   if (!dataset) return <p>No se encontró el dataset</p>
   return (
     <>
-      <div className="sm:px-10 md:px-14 lg:px-20 px-4 mb-8">
+      <div className="px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 mb-8">
         <section>
           <div className="flex flex-col mt-30">
             <div className="flex flex-col md:flex-row items-start justify-between ">
@@ -167,7 +167,7 @@ const DatasetsDetails = () => {
             </p>
           </div>
 
-          <section className="mt-10 flex flex-col md:flex-row md:flex-nowrap gap-6">
+          <section className="mt-10 flex flex-col md:flex-row md:flex-nowrap md:justify-between gap-10">
             {/* Columna izquierda */}
             <div className="w-full md:w-3/5 flex flex-col gap-4 rounded-xl p-5">
               <div className="flex flex-col gap-2">
