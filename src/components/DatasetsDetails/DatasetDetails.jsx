@@ -169,7 +169,7 @@ const DatasetsDetails = () => {
 
           <section className="mt-10 flex flex-col md:flex-row md:flex-nowrap md:justify-between gap-10">
             {/* Columna izquierda */}
-            <div className="w-full md:w-3/5 flex flex-col gap-4 rounded-xl p-5">
+            <div className="w-full md:w-3/5 flex flex-col justify-center gap-4 rounded-xl p-5">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset?.resources?.length > 0 ? (
