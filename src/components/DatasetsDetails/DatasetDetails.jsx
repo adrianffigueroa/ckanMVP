@@ -167,7 +167,7 @@ const DatasetsDetails = () => {
             </p>
           </div>
 
-          <section className="mt-10 flex flex-col lg:flex-row gap-6">
+          <section className="mt-10 flex flex-col md:flex-row md:flex-nowrap gap-6">
             {/* Columna izquierda */}
             <div className="w-full md:w-3/5 flex flex-col gap-4 rounded-xl p-5">
               <div className="flex flex-col gap-2">
@@ -228,7 +228,7 @@ const DatasetsDetails = () => {
             </div>
 
             {/* Columna derecha */}
-            <div className="w-1/3 md:w-full bg-white rounded-xl p-5 shadow border border-gray-200">
+            <div className="w-full md:w-1/3 max-w-[360px] bg-white rounded-xl p-5 shadow border border-gray-200">
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4">
                   <div className="flex items-center">
