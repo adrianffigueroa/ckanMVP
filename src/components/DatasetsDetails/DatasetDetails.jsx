@@ -176,7 +176,7 @@ const DatasetsDetails = () => {
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="flex flex-wrap md:flex-nowrap md:items-start md:justify-between gap-4 border-b pb-4"
+                      className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 border-b pb-4 items-start"
                     >
                       {/* Izquierda: formato + info */}
                       <div className="flex flex-grow items-start lg:items-center gap-3 min-w-0">
