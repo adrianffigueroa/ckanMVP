@@ -169,23 +169,23 @@ const DatasetsDetails = () => {
 
           <section className="mt-10 flex flex-col md:flex-row md:flex-nowrap md:justify-between gap-10">
             {/* Columna izquierda */}
-            <div className="w-full flex flex-col items-center gap-4 rounded-xl p-5">
+            <div className="w-full flex flex-col items-start gap-4 rounded-xl px-5 pt-5 pb-0">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset?.resources?.length > 0 ? (
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 border-b pb-4 items-start"
+                      className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-x-4 gap-y-2 border-b pb-4 w-full"
                     >
                       {/* Izquierda: formato + info */}
                       <div className="flex w-full items-start lg:items-center min-w-0">
                         <Badge
-                          className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold`}
+                          className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold self-start`}
                         >
                           {res.format?.toUpperCase()}
                         </Badge>
-                        <div className="flex flex-col overflow-hidden">
+                        <div className="flex flex-col overflow-hidden min-w-0">
                           <a
                             href={res.url}
                             target="_blank"
