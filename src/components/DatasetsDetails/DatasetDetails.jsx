@@ -81,7 +81,7 @@ const getGroupIcon = (groupName, type = '') => {
   const Icon = icons[groupName?.toLowerCase()] || Globe
   return (
     <div
-      className={`w-5 h-5 p-2 rounded-md flex items-center justify-center ${type ? 'bg-transparent text-gray-600' : 'bg-third text-primary'}`}
+      className={`p-2 rounded-md flex items-center justify-center ${type ? 'bg-transparent text-gray-600' : 'bg-third text-primary'}`}
     >
       <Icon className="w-5 h-5" />
     </div>
