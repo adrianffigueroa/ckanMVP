@@ -52,11 +52,7 @@ const Navbar = () => {
         <div className="hidden custom-md:flex">
           <Link to="/" className="flex items-center gap-2">
             {logoURL ? (
-              <img
-                src={logoURL}
-                alt="Logo"
-                className="w-12 h-12 rounded-full"
-              />
+              <img src={logoURL} alt="Logo" className="w-16 h-16 rounded-2xl" />
             ) : (
               <span className="text-xl font-bold text-primary">Logo</span>
             )}
