@@ -55,7 +55,7 @@
   --primary-r: 74;
   --primary-g: 58;
   --primary-b: 255;
-  --shadow-color-light: rgba(
+  /* --shadow-color-light: rgba(
     var(--primary-r),
     var(--primary-g),
     var(--primary-b),
@@ -72,7 +72,10 @@
     var(--primary-g),
     var(--primary-b),
     0.3
-  ) !important;
+  ) !important; */
+  --shadow-color-light: color-mix(in srgb, var(--primary) 15%, transparent);
+  --shadow-color-medium: color-mix(in srgb, var(--primary) 25%, transparent);
+  --shadow-color-dark: color-mix(in srgb, var(--primary) 30%, transparent);
   --decorator: rgb(243, 243, 255);
   --customColor1: rgb(0, 0, 0);
   --customColor1Hover: rgb(255, 255, 255);
