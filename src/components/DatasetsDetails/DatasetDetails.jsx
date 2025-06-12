@@ -201,7 +201,7 @@ const DatasetsDetails = () => {
                       </div>
 
                       {/* Derecha: botones */}
-                      <div className="flex flex-row gap-1 flex-shrink-0 max-[600px]:flex-col w-full md:w-auto md:ml-auto max-[600px]:items-stretch">
+                      <div className="flex flex-row gap-1 flex-shrink-0 max-[600px]:flex-col w-full md:w-auto md:ml-auto max-[600px]:items-start">
                         <Button
                           onClick={() => handleDownload(res)}
                           className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
@@ -228,7 +228,7 @@ const DatasetsDetails = () => {
             </div>
 
             {/* Columna derecha */}
-            <div className="w-full bg-white rounded-xl p-5 shadow border border-gray-200">
+            <div className="w-1/3 bg-white rounded-xl p-5 shadow border border-gray-200">
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4">
                   <div className="flex items-center">
