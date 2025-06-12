@@ -176,10 +176,10 @@ const DatasetsDetails = () => {
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b pb-4"
+                      className="flex flex-wrap md:flex-nowrap md:items-center md:justify-between gap-4 border-b pb-4"
                     >
                       {/* Izquierda: formato + info */}
-                      <div className="flex flex-grow items-start lg:items-center gap-3">
+                      <div className="flex flex-grow items-start lg:items-center gap-3 min-w-0">
                         <Badge
                           className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold`}
                         >
@@ -201,7 +201,7 @@ const DatasetsDetails = () => {
                       </div>
 
                       {/* Derecha: botones */}
-                      <div className="flex flex-row gap-1 flex-shrink-0 max-[900px]:flex-col max-[900px]:items-start w-full md:w-auto md:ml-auto">
+                      <div className="flex flex-row gap-1 flex-shrink-0 md:ml-auto">
                         <Button
                           onClick={() => handleDownload(res)}
                           className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-start gap-1 hover:cursor-pointer"
