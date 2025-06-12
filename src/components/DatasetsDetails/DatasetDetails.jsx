@@ -139,7 +139,7 @@ const DatasetsDetails = () => {
       <div className="px-20 mb-8">
         <section>
           <div className="flex flex-col mt-30">
-            <div className="flex flex-col md:flex-row items-start justify-between ">
+            <div className="flex flex-col custom-md:flex-row items-start justify-between ">
               <Breadcrumb className="mb-4">
                 <BreadcrumbList>
                   <BreadcrumbItem>
@@ -176,7 +176,7 @@ const DatasetsDetails = () => {
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b pb-4"
+                      className="flex flex-col custom-md:flex-row custom-md:items-center custom-md:justify-between gap-4 border-b pb-4"
                     >
                       {/* Izquierda: formato + info */}
                       <div className="flex flex-grow items-start gap-3">
@@ -201,7 +201,7 @@ const DatasetsDetails = () => {
                       </div>
 
                       {/* Derecha: botones */}
-                      <div className="flex flex-row gap-2 flex-shrink-0 max-[450px]:flex-col w-full md:w-auto md:ml-auto max-[450px]:items-stretch">
+                      <div className="flex flex-row gap-2 flex-shrink-0 max-[450px]:flex-col w-full custom-md:w-auto custom-md:ml-auto max-[450px]:items-stretch">
                         <Button
                           onClick={() => handleDownload(res)}
                           className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
