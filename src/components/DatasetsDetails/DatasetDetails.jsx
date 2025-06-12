@@ -47,7 +47,7 @@ import { useState } from 'react'
 import DocViewer, { DocViewerRenderers } from 'react-doc-viewer'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const getGroupIcon = (groupName) => {
+const getGroupIcon = (groupName, type = '') => {
   const icons = {
     salud: HeartPulse,
     educacion: School,
@@ -80,8 +80,10 @@ const getGroupIcon = (groupName) => {
 
   const Icon = icons[groupName?.toLowerCase()] || Globe
   return (
-    <div className="bg-third p-2 rounded-md flex items-center justify-center">
-      <Icon className="w-5 h-5 text-primary" />
+    <div
+      className={`w-5 h-5 p-2 rounded-md flex items-center justify-center ${type ? 'bg-transparent text-gray-600' : 'bg-third text-primary'}`}
+    >
+      <Icon className="w-5 h-5 " />
     </div>
   )
 }
@@ -227,7 +229,7 @@ const DatasetsDetails = () => {
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4">
                   <div className="flex items-center">
-                    {getGroupIcon(dataset?.groups[0].name)}
+                    {getGroupIcon(dataset?.groups[0].name, column)}
                   </div>
                   <div className="w-full">
                     <p className="customColor2 text-sm">Desarrollado por</p>
