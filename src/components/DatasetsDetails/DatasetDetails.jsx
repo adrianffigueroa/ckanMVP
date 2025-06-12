@@ -245,7 +245,7 @@ const DatasetsDetails = () => {
               <ul className="text-sm space-y-8 mt-4">
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">Grupo</div>
-                  <div className="w-5 h-5">
+                  <div className="customColor2 bg-transparent">
                     {getGroupIcon(dataset?.groups[0].name)}
                   </div>
                 </li>
@@ -255,18 +255,6 @@ const DatasetsDetails = () => {
                     className={`${dataset?.state === 'active' ? 'text-green-600' : 'text-red-600'} font-semibold`}
                   >
                     {dataset?.state === 'active' ? 'Activo' : 'Inactivo'}
-                  </div>
-                </li>
-                <li className="grid grid-cols-2 items-start">
-                  <div className="customColor1 font-semibold">
-                    Fecha de creación
-                  </div>
-                  <div className="customColor2">
-                    {dataset?.metadata_created
-                      ? new Date(dataset.metadata_created).toLocaleDateString(
-                          'es-AR'
-                        )
-                      : 'No disponible'}
                   </div>
                 </li>
                 <li className="grid grid-cols-2 items-start">
@@ -283,11 +271,23 @@ const DatasetsDetails = () => {
                 </li>
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">
-                    Actualización
+                    Frec. de Actualización
                   </div>
                   <div className="customColor2">
                     {dataset?.extras[0].value
                       ? toTitleCase(dataset?.extras[0].value)
+                      : 'No disponible'}
+                  </div>
+                </li>
+                <li className="grid grid-cols-2 items-start">
+                  <div className="customColor1 font-semibold">
+                    Fecha de creación
+                  </div>
+                  <div className="customColor2">
+                    {dataset?.metadata_created
+                      ? new Date(dataset.metadata_created).toLocaleDateString(
+                          'es-AR'
+                        )
                       : 'No disponible'}
                   </div>
                 </li>
