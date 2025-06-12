@@ -176,21 +176,21 @@ const DatasetsDetails = () => {
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="flex flex-col sm:flex-row gap-4 border-b pb-4"
+                      className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b pb-4"
                     >
                       {/* Izquierda: formato + info */}
-                      <div className="flex gap-3 flex-grow">
+                      <div className="flex flex-grow items-start gap-3">
                         <Badge
-                          className={`${getColorByFormat(res.format)} text-white text-xs w-14 h-8 flex items-center justify-center`}
+                          className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold`}
                         >
                           {res.format?.toUpperCase()}
                         </Badge>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col overflow-hidden">
                           <a
                             href={res.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-primary font-medium text-sm hover:underline break-all"
+                            className="text-primary font-medium text-sm hover:underline truncate"
                           >
                             {res.name}
                           </a>
@@ -200,16 +200,17 @@ const DatasetsDetails = () => {
                         </div>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 w-full">
+                      {/* Derecha: botones */}
+                      <div className="flex flex-row gap-2 flex-shrink-0">
                         <Button
                           onClick={() => handleDownload(res)}
-                          className="min-w-[96px] h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                          className="w-[110px] h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
                         >
                           Descargar <Download size={14} />
                         </Button>
                         <Button
                           onClick={() => handleVerRecurso(res)}
-                          className="min-w-[96px] h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
+                          className="w-[120px] h-9 rounded-xl bg-primary text-white text-sm flex items-center justify-center gap-1 button-custom hover:cursor-pointer"
                         >
                           Ver Recurso <Eye size={14} />
                         </Button>
