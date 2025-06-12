@@ -179,7 +179,7 @@ const DatasetsDetails = () => {
                       className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 border-b pb-4 items-start"
                     >
                       {/* Izquierda: formato + info */}
-                      <div className="flex w-full items-start lg:items-center gap-3 min-w-0">
+                      <div className="flex w-full items-start lg:items-center min-w-0">
                         <Badge
                           className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold`}
                         >
