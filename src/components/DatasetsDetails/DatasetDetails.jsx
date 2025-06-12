@@ -169,14 +169,14 @@ const DatasetsDetails = () => {
 
           <section className="mt-10 flex flex-col md:flex-row md:flex-nowrap md:justify-between gap-10">
             {/* Columna izquierda */}
-            <div className="w-full flex flex-col items-start gap-4 rounded-xl px-5 pt-5 pb-0">
+            <div className="w-full flex flex-col items-start gap-4 rounded-xl pt-5 pb-0">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset?.resources?.length > 0 ? (
                   dataset?.resources?.map((res, index) => (
                     <div
                       key={res.id || index}
-                      className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center gap-x-6 gap-y-2 border-b pb-4 w-full"
+                      className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-4 border-b pb-4 items-center"
                     >
                       {/* Badge */}
                       <div className="flex items-center">
