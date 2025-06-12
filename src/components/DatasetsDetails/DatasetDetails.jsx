@@ -169,7 +169,7 @@ const DatasetsDetails = () => {
 
           <section className="mt-10 flex flex-col custom-md:flex-row gap-10">
             {/* Columna izquierda */}
-            <div className="w-full lg:w-3/5 flex flex-col gap-4 rounded-xl p-5">
+            <div className="w-full custom-md:w-3/5 flex flex-col gap-4 rounded-xl p-5">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset?.resources?.length > 0 ? (
@@ -204,14 +204,14 @@ const DatasetsDetails = () => {
                       <div className="flex flex-row gap-2 flex-shrink-0 max-[450px]:flex-col w-full md:w-auto md:ml-auto max-[450px]:items-stretch">
                         <Button
                           onClick={() => handleDownload(res)}
-                          className="w-[120px] h-9  text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
+                          className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
                           variant="ghost"
                         >
                           Descargar <Download size={14} />
                         </Button>
                         <Button
                           onClick={() => handleVerRecurso(res)}
-                          className="w-[120px] h-9  text-gray-600 text-sm flex items-center justify-center gap-1  hover:cursor-pointer"
+                          className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
                           variant="ghost"
                         >
                           Ver Recurso <Eye size={14} />
