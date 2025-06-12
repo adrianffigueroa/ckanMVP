@@ -13,45 +13,72 @@ import { toTitleCase } from '@/utils/toTitleCase'
 import { useQuery } from '@tanstack/react-query'
 import {
   Atom,
+  Baby,
   Banknote,
+  BarChart,
   Briefcase,
   Building2,
   Bus,
-  Download,
+  Cctv,
+  DollarSign,
   Dumbbell,
-  Eye,
+  Factory,
+  Gavel,
   Globe,
-  GraduationCap,
   HeartPulse,
+  Home,
+  Leaf,
+  Map,
+  Mountain,
   Palette,
-  Shield,
+  Plug,
+  GraduationCap as School,
+  TrafficCone,
+  User,
   UserCheck,
   Users,
+  Venus,
+  Wallet,
 } from 'lucide-react'
+
 import { useState } from 'react'
 import DocViewer, { DocViewerRenderers } from 'react-doc-viewer'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const getGroupIcon = (groupName) => {
   const icons = {
-    ciencia: Atom,
-    educación: GraduationCap,
-    empleo: Briefcase,
-    geografía: Globe,
     salud: HeartPulse,
-    ciudadanía: Users,
-    seguridad: Shield,
-    economía: Banknote,
-    infraestructura: Bus,
+    educacion: School,
+    seguridad: Cctv,
+    ambiente: Leaf,
+    desarrollo: Briefcase,
+    economica: DollarSign,
+    transporte: Bus,
     cultura: Palette,
     deporte: Dumbbell,
-    demografía: UserCheck,
-    urbanismo: Building2,
+    turismo: Mountain,
+    vivienda: Home,
+    'hacienda-y-finanzas': Banknote,
+    'trabajo-y-empleo': UserCheck,
+    'obras-publicas': Building2,
+    'servicios-publicos': Plug,
+    'gobierno-abierto': Globe,
+    'participacion-ciudadana': Users,
+    'genero-y-diversidad': Venus,
+    'ninez-y-adolescencia': Baby,
+    'adultos-mayores': User,
+    'ciencia-y-tecnologia': Atom,
+    produccion: Factory,
+    justicia: Gavel,
+    'datos-demograficos': BarChart,
+    'catastro-y-urbanismo': Map,
+    'presupuesto-y-gasto-publico': Wallet,
+    'movilidad-y-transito': TrafficCone,
   }
 
   const Icon = icons[groupName?.toLowerCase()] || Globe
   return (
-    <div className="bg-violet-100 p-2 rounded-md flex items-center justify-center">
+    <div className="bg-third p-2 rounded-md flex items-center justify-center">
       <Icon className="w-5 h-5 text-primary" />
     </div>
   )
@@ -138,7 +165,7 @@ const DatasetsDetails = () => {
 
           <section className="mt-10 flex flex-col md:flex-row gap-10">
             {/* Columna izquierda */}
-            <div className="w-full lg:w-3/5 flex flex-col gap-4 bg-white rounded-xl p-5 shadow border border-gray-200">
+            <div className="w-full lg:w-3/5 flex flex-col gap-4 rounded-xl p-5">
               <div className="flex flex-col gap-2">
                 {Array.isArray(dataset?.resources) &&
                 dataset?.resources?.length > 0 ? (
@@ -214,6 +241,10 @@ const DatasetsDetails = () => {
                 </p>
               </div>
               <ul className="text-sm space-y-8 mt-4">
+                <li className="grid grid-cols-2 items-start">
+                  <div className="customColor1 font-semibold">Grupo</div>
+                  <div>{getGroupIcon(dataset?.groups[0].name)}</div>
+                </li>
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">Estado</div>
                   <div
