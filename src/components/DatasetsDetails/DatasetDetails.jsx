@@ -248,29 +248,36 @@ const DatasetsDetails = () => {
                 </p>
               </div>
               <ul className="text-sm space-y-6 mt-4">
-                <li className="grid grid-cols-[150px_1fr] items-center">
-                  <div className="customColor1 font-semibold">Grupo</div>
-                  <div className="customColor2 bg-transparent flex justify-start">
+                <li className="flex items-start">
+                  <p className="text-primary">Información</p>
+                </li>
+                <li className="flex items-start">
+                  <div className="customColor1 font-semibold w-[180px]">
+                    Grupo
+                  </div>
+                  <div className="customColor2 flex items-center pl-4">
                     {getGroupIcon(dataset?.groups[0].name, 'columna')}
                   </div>
                 </li>
-                <li className="grid grid-cols-[150px_1fr] items-center">
-                  <div className="customColor1 font-semibold">Estado</div>
+                <li className="flex items-start">
+                  <div className="customColor1 font-semibold w-[180px]">
+                    Estado
+                  </div>
                   <div
                     className={`${
                       dataset?.state === 'active'
                         ? 'text-green-600'
                         : 'text-red-600'
-                    } font-semibold`}
+                    } font-semibold pl-4`}
                   >
                     {dataset?.state === 'active' ? 'Activo' : 'Inactivo'}
                   </div>
                 </li>
-                <li className="grid grid-cols-[150px_1fr] items-center">
-                  <div className="customColor1 font-semibold">
+                <li className="flex items-start">
+                  <div className="customColor1 font-semibold w-[180px]">
                     Última actualización
                   </div>
-                  <div className="customColor2">
+                  <div className="customColor2 pl-4">
                     {dataset?.metadata_modified
                       ? new Date(dataset.metadata_modified).toLocaleDateString(
                           'es-AR'
@@ -278,21 +285,21 @@ const DatasetsDetails = () => {
                       : 'No disponible'}
                   </div>
                 </li>
-                <li className="grid grid-cols-[150px_1fr] items-center">
-                  <div className="customColor1 font-semibold">
-                    Frec. de Actualización
+                <li className="flex items-start">
+                  <div className="customColor1 font-semibold w-[180px]">
+                    Frecuencia de actualización
                   </div>
-                  <div className="customColor2">
+                  <div className="customColor2 pl-4">
                     {dataset?.extras[0].value
                       ? toTitleCase(dataset?.extras[0].value)
                       : 'No disponible'}
                   </div>
                 </li>
-                <li className="grid grid-cols-[150px_1fr] items-center">
-                  <div className="customColor1 font-semibold">
+                <li className="flex items-start">
+                  <div className="customColor1 font-semibold w-[180px]">
                     Fecha de creación
                   </div>
-                  <div className="customColor2">
+                  <div className="customColor2 pl-4">
                     {dataset?.metadata_created
                       ? new Date(dataset.metadata_created).toLocaleDateString(
                           'es-AR'
@@ -300,11 +307,11 @@ const DatasetsDetails = () => {
                       : 'No disponible'}
                   </div>
                 </li>
-                <li className="grid grid-cols-[150px_1fr] items-start">
-                  <div className="customColor1 font-semibold mt-1">
+                <li className="flex items-start">
+                  <div className="customColor1 font-semibold w-[180px] mt-1">
                     Etiquetas
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pl-4">
                     {dataset?.tags?.map((tag) => (
                       <Badge
                         key={tag.name}
