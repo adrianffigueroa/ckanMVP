@@ -83,7 +83,7 @@ const getGroupIcon = (groupName, type = '') => {
     <div
       className={`w-5 h-5 p-2 rounded-md flex items-center justify-center ${type ? 'bg-transparent text-gray-600' : 'bg-third text-primary'}`}
     >
-      <Icon className="w-5 h-5 " />
+      <Icon className="w-5 h-5" />
     </div>
   )
 }
@@ -229,7 +229,7 @@ const DatasetsDetails = () => {
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4">
                   <div className="flex items-center">
-                    {getGroupIcon(dataset?.groups[0].name, column)}
+                    {getGroupIcon(dataset?.groups[0].name, 'columna')}
                   </div>
                   <div className="w-full">
                     <p className="customColor2 text-sm">Desarrollado por</p>
