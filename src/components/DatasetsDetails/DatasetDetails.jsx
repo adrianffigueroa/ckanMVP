@@ -136,7 +136,7 @@ const DatasetsDetails = () => {
   if (!dataset) return <p>No se encontró el dataset</p>
   return (
     <>
-      <div className="sm:px-10 md:px-14 lg:px-20 px-6 mb-8">
+      <div className="sm:px-10 md:px-14 lg:px-20 px-4 mb-8">
         <section>
           <div className="flex flex-col mt-30">
             <div className="flex flex-col md:flex-row items-start justify-between ">
@@ -179,7 +179,7 @@ const DatasetsDetails = () => {
                       className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b pb-4"
                     >
                       {/* Izquierda: formato + info */}
-                      <div className="flex flex-grow items-start gap-3">
+                      <div className="flex flex-grow items-start lg:items-center gap-3">
                         <Badge
                           className={`${getColorByFormat(res.format)} flex-none w-14 h-8 flex items-center justify-center text-white text-xs font-bold`}
                         >
@@ -201,7 +201,7 @@ const DatasetsDetails = () => {
                       </div>
 
                       {/* Derecha: botones */}
-                      <div className="flex flex-row gap-2 flex-shrink-0 max-[600px]:flex-col w-full md:w-auto md:ml-auto max-[600px]:items-stretch">
+                      <div className="flex flex-row gap-1 flex-shrink-0 max-[600px]:flex-col w-full md:w-auto md:ml-auto max-[600px]:items-stretch">
                         <Button
                           onClick={() => handleDownload(res)}
                           className="w-[120px] h-9 text-gray-600 text-sm flex items-center justify-center gap-1 hover:cursor-pointer"
