@@ -245,7 +245,9 @@ const DatasetsDetails = () => {
               <ul className="text-sm space-y-8 mt-4">
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">Grupo</div>
-                  <div>{getGroupIcon(dataset?.groups[0].name)}</div>
+                  <div className="w-5 h-5">
+                    {getGroupIcon(dataset?.groups[0].name)}
+                  </div>
                 </li>
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">Estado</div>
@@ -257,11 +259,11 @@ const DatasetsDetails = () => {
                 </li>
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">
-                    Última actualización
+                    Fecha de creación
                   </div>
                   <div className="customColor2">
-                    {dataset?.metadata_modified
-                      ? new Date(dataset.metadata_modified).toLocaleDateString(
+                    {dataset?.metadata_created
+                      ? new Date(dataset.metadata_created).toLocaleDateString(
                           'es-AR'
                         )
                       : 'No disponible'}
@@ -269,11 +271,11 @@ const DatasetsDetails = () => {
                 </li>
                 <li className="grid grid-cols-2 items-start">
                   <div className="customColor1 font-semibold">
-                    Fecha de creación
+                    Última actualización
                   </div>
                   <div className="customColor2">
-                    {dataset?.metadata_created
-                      ? new Date(dataset.metadata_created).toLocaleDateString(
+                    {dataset?.metadata_modified
+                      ? new Date(dataset.metadata_modified).toLocaleDateString(
                           'es-AR'
                         )
                       : 'No disponible'}
