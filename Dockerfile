@@ -1,29 +1,25 @@
-# Usa una imagen oficial de Node para construir la app
-FROM node:18 AS build
+# Etapa 1: Build de la app
+FROM node:20-slim AS build
 
-# Crea y entra al directorio de la app
 WORKDIR /app
 
-# Copia package.json y package-lock.json
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-# Instala dependencias
-RUN npm install
+RUN npm config set registry https://registry.npmjs.org && npm install
 
-# Copia el resto del código fuente
-COPY . .
+COPY . ./
 
-# Compila la app para producción
 RUN npm run build
 
-# Usa una imagen de Nginx para servir la app compilada
-FROM nginx:alpine
+# Etapa 2: Imagen final con NGINX
+FROM nginx:stable-alpine
 
-# Copia el build de React a la carpeta pública de Nginx
+RUN rm -rf /usr/share/nginx/html/*
+
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expone el puerto 80
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 
-# Comando por defecto (levanta Nginx)
 CMD ["nginx", "-g", "daemon off;"]

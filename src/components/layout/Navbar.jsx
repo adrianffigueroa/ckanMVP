@@ -4,7 +4,8 @@ import { Menu } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const BASE_URL =
+  window.env?.VITE_API_BASE_URL || import.meta.env.VITE_API_BASE_URL
 const CKAN_ADMIN_USERNAME = import.meta.env.VITE_CKAN_ADMIN_USERNAME
 const Navbar = () => {
   const [open, setOpen] = useState(false)
