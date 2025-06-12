@@ -247,14 +247,14 @@ const DatasetsDetails = () => {
                   {dataset?.organization?.description || 'Sin descripción'}
                 </p>
               </div>
-              <ul className="text-sm space-y-8 mt-4">
-                <li className="grid grid-cols-2 items-start">
+              <ul className="text-sm space-y-6 mt-4">
+                <li className="grid grid-cols-[150px_1fr] items-center">
                   <div className="customColor1 font-semibold">Grupo</div>
-                  <div className="customColor2 bg-transparent">
+                  <div className="customColor2 bg-transparent flex justify-start">
                     {getGroupIcon(dataset?.groups[0].name, 'columna')}
                   </div>
                 </li>
-                <li className="grid grid-cols-2 items-start">
+                <li className="grid grid-cols-[150px_1fr] items-center">
                   <div className="customColor1 font-semibold">Estado</div>
                   <div
                     className={`${
@@ -266,7 +266,7 @@ const DatasetsDetails = () => {
                     {dataset?.state === 'active' ? 'Activo' : 'Inactivo'}
                   </div>
                 </li>
-                <li className="grid grid-cols-2 items-start">
+                <li className="grid grid-cols-[150px_1fr] items-center">
                   <div className="customColor1 font-semibold">
                     Última actualización
                   </div>
@@ -278,7 +278,7 @@ const DatasetsDetails = () => {
                       : 'No disponible'}
                   </div>
                 </li>
-                <li className="grid grid-cols-2 items-start">
+                <li className="grid grid-cols-[150px_1fr] items-center">
                   <div className="customColor1 font-semibold">
                     Frec. de Actualización
                   </div>
@@ -288,7 +288,7 @@ const DatasetsDetails = () => {
                       : 'No disponible'}
                   </div>
                 </li>
-                <li className="grid grid-cols-2 items-start">
+                <li className="grid grid-cols-[150px_1fr] items-center">
                   <div className="customColor1 font-semibold">
                     Fecha de creación
                   </div>
@@ -300,7 +300,7 @@ const DatasetsDetails = () => {
                       : 'No disponible'}
                   </div>
                 </li>
-                <li className="grid grid-cols-2 items-start">
+                <li className="grid grid-cols-[150px_1fr] items-start">
                   <div className="customColor1 font-semibold mt-1">
                     Etiquetas
                   </div>
