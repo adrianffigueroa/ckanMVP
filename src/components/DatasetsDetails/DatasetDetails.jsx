@@ -228,7 +228,7 @@ const DatasetsDetails = () => {
             </div>
 
             {/* Columna derecha */}
-            <div className="w-full md:w-1/3 bg-white rounded-xl p-5 shadow border border-gray-200">
+            <div className="w-full bg-white rounded-xl p-5 shadow border border-gray-200">
               <div className="flex flex-col items-center lg:items-start gap-4 border-b-2">
                 <div className="flex gap-4">
                   <div className="flex items-center">
